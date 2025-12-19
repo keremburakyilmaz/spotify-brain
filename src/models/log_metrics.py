@@ -2,6 +2,12 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, Optional
+import sys
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+from utils.sanitize_json import sanitize_dict, sanitize_json_file
 
 
 def log_metrics(history_path: str = "metrics/metrics_history.json",
@@ -50,10 +56,16 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
     # Append to history
     history.append(entry)
     
+    # Sanitize NaN values before saving
+    history = sanitize_dict(history)
+    
     # Save
     os.makedirs(os.path.dirname(history_path), exist_ok=True)
     with open(history_path, 'w') as f:
         json.dump(history, f, indent=2)
+    
+    # Double-check: sanitize the file after writing
+    sanitize_json_file(history_path)
     
     print(f"Logged metrics to {history_path}")
 

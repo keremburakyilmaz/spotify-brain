@@ -10,6 +10,8 @@ import sys
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
+from utils.sanitize_json import sanitize_dict, sanitize_json_file
+
 
 def cyclical_encode(value: float, max_value: float) -> tuple:
     sin_val = np.sin(2 * np.pi * value / max_value)
@@ -295,10 +297,16 @@ def build_dashboard_json(history_path: str = "data/history.parquet",
         }
     }
     
+    # Sanitize NaN values before saving
+    dashboard_data = sanitize_dict(dashboard_data)
+    
     # Save
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w') as f:
         json.dump(dashboard_data, f, indent=2)
+    
+    # Double-check: sanitize the file after writing
+    sanitize_json_file(output_path)
     
     print(f"Saved dashboard data to {output_path}")
     

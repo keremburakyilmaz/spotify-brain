@@ -5,6 +5,12 @@ import os
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from typing import Dict, List, Tuple
+import sys
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+from utils.sanitize_json import sanitize_dict, sanitize_json_file
 
 
 def extract_feature_matrix(df: pd.DataFrame) -> np.ndarray:
@@ -149,12 +155,20 @@ def build_mood_clusters(history_path: str = "data/history.parquet",
         clusters_metadata.append(cluster_data)
     
     # Save metadata
+    clusters_data = {
+        "optimal_k": optimal_k,
+        "clusters": clusters_metadata
+    }
+    
+    # Sanitize NaN values before saving
+    clusters_data = sanitize_dict(clusters_data)
+    
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w') as f:
-        json.dump({
-            "optimal_k": optimal_k,
-            "clusters": clusters_metadata
-        }, f, indent=2)
+        json.dump(clusters_data, f, indent=2)
+    
+    # Double-check: sanitize the file after writing
+    sanitize_json_file(output_path)
     
     print(f"Saved cluster metadata to {output_path}")
     
