@@ -27,7 +27,7 @@ def build_mood_dataset(history_path: str = "data/history.parquet",
     if len(df) < window_size + 1:
         raise ValueError(f"Not enough tracks for window size {window_size}")
     
-    print(f"Building mood dataset from {len(df)} tracks...")
+    print(f"Building mood dataset from {len(df)} tracks")
     
     # Sort by session and time
     df = df.sort_values(["session_id", "played_at"]).reset_index(drop=True)

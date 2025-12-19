@@ -66,7 +66,7 @@ def assign_tracks_to_existing_clusters(history_path: str = "data/history.parquet
         print("No tracks with complete features to assign")
         return df
     
-    print(f"Assigning clusters to {len(unassigned_clean)} new tracks...")
+    print(f"Assigning clusters to {len(unassigned_clean)} new tracks")
     
     # Extract feature matrix
     X_new = unassigned_clean[features].values

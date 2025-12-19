@@ -22,7 +22,7 @@ def build_session_dataset_incremental(history_path: str = "data/history.parquet"
     if df.empty:
         raise ValueError("History is empty")
     
-    print(f"Building session dataset from {len(df)} tracks...")
+    print(f"Building session dataset from {len(df)} tracks")
     
     # Ensure played_at is datetime
     df["played_at"] = pd.to_datetime(df["played_at"])

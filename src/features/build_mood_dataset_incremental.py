@@ -47,9 +47,9 @@ def build_mood_dataset_incremental(history_path: str = "data/history.parquet",
     if last_processed_timestamp:
         df["played_at"] = pd.to_datetime(df["played_at"])
         df = df[df["played_at"] > pd.to_datetime(last_processed_timestamp)]
-        print(f"Processing {len(df)} new tracks since last update...")
+        print(f"Processing {len(df)} new tracks since last update")
     else:
-        print(f"Building initial dataset from {len(df)} tracks...")
+        print(f"Building initial dataset from {len(df)} tracks")
     
     if len(df) == 0:
         print("No new tracks to process")
