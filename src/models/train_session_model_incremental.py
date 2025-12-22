@@ -257,14 +257,16 @@ def train_session_model_incremental(dataset_path: str = "data/processed/session_
     
     # Continue training from existing model if available
     if existing_model:
-        print(f"Continuing training: adding {model.n_estimators} more trees to existing {existing_model.n_estimators} trees")
+        existing_tree_count = existing_model.n_estimators
+        print(f"Continuing training: adding {model.n_estimators} more trees to existing {existing_tree_count} trees")
         model.fit(
             X_train, y_train,
             eval_set=[(X_val, y_val)],
             xgb_model=existing_model,  # Continue from existing model
             verbose=False
         )
-        print(f"Model now has {model.n_estimators} total trees")
+        total_trees = existing_tree_count + model.n_estimators
+        print(f"Model now has {total_trees} total trees ({existing_tree_count} existing + {model.n_estimators} new)")
     else:
         print("Training new model from scratch")
         model.fit(
