@@ -316,7 +316,8 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
         print("No new tracks found.")
         return existing_df if not existing_df.empty else pd.DataFrame()
 
-    cutoff_dt = latest_timestamp or datetime(1970, 1, 1, tzinfo=timezone.utc)
+    # Filter by timestamp if history is not empty
+    # If history is empty, get all tracks (don't filter by timestamp)
     new_records: List[Dict] = []
 
     for item in recent_items:
@@ -325,14 +326,16 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
             continue
         played_at = pd.to_datetime(played_at_str)
 
-        if played_at <= cutoff_dt:
-            continue
+        if latest_timestamp is not None:
+            if played_at <= latest_timestamp:
+                continue
 
         track = item.get("track") or {}
         track_id = track.get("id")
         if not track_id:
             continue
 
+        # Check for duplicates using both track_id and played_at timestamp
         played_at_ns = pd.Timestamp(played_at).value  
         key = (str(track_id), played_at_ns)
         if key in existing_pairs:
@@ -367,7 +370,7 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
 
     audio_features = ingester.fetch_audio_features(track_ids, id_to_label=id_to_label)
 
-    print("Fetching track metadata and genres from Spotify")
+    print("Fetching track metadata from Spotify")
     metadata = ingester.fetch_track_metadata(track_ids)
 
     audio_feature_cols = [
@@ -419,12 +422,12 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
 
     if not existing_df.empty:
         all_cols = sorted(set(existing_df.columns) | set(new_df.columns))
-        for col in all_cols:
-            if col not in existing_df.columns:
-                existing_df[col] = None
-            if col not in new_df.columns:
-                new_df[col] = None
-        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+        existing_df = existing_df.reindex(columns=all_cols)
+        new_df = new_df.reindex(columns=all_cols)
+        if not new_df.empty:
+            combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+        else:
+            combined_df = existing_df
     else:
         combined_df = new_df
 
@@ -433,6 +436,7 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
     combined_df = combined_df.sort_values("played_at").reset_index(drop=True)
     
     # Update ingestion file with session_ids by extracting new tracks from combined_df
+    new_tracks_with_sessions = None
     if ingestion_file and not new_df.empty:
         # Extract new tracks from combined_df using merge on (track_id, played_at)
         new_tracks_with_sessions = combined_df.merge(
@@ -444,21 +448,66 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
         if not new_tracks_with_sessions.empty:
             new_tracks_with_sessions.to_parquet(ingestion_file, index=False)
             print(f"Updated ingestion file with session IDs")
+    print(
+        f"Ingestion complete. New tracks this run: {len(new_df)}. "
+        f"History will be updated at the end of the pipeline."
+    )
     
+    # Return the new tracks DataFrame with session IDs
+    return new_tracks_with_sessions if new_tracks_with_sessions is not None and not new_tracks_with_sessions.empty else new_df
+
+def update_history_from_ingestion(ingestion_file_path: str,
+                                  history_path: str = "data/history.parquet") -> pd.DataFrame:
+    # Load ingestion file
+    if not os.path.exists(ingestion_file_path):
+        raise FileNotFoundError(f"Ingestion file not found: {ingestion_file_path}")
+    
+    new_df = pd.read_parquet(ingestion_file_path)
+    
+    if new_df.empty:
+        print("Ingestion file is empty, nothing to update")
+        if os.path.exists(history_path):
+            return pd.read_parquet(history_path)
+        return pd.DataFrame()
+    
+    # Load existing history
+    if os.path.exists(history_path):
+        existing_df = pd.read_parquet(history_path)
+    else:
+        existing_df = pd.DataFrame()
+    
+    # Combine existing and new tracks
+    if not existing_df.empty:
+        all_cols = sorted(set(existing_df.columns) | set(new_df.columns))
+        for col in all_cols:
+            if col not in existing_df.columns:
+                existing_df[col] = None
+            if col not in new_df.columns:
+                new_df[col] = None
+        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+        # Remove duplicates
+        combined_df = combined_df.drop_duplicates(subset=["track_id", "played_at"], keep="last")
+    else:
+        combined_df = new_df.copy()
+    
+    # Drop rows with null values
     rows_before = len(combined_df)
     combined_df = combined_df.dropna()
     rows_dropped = rows_before - len(combined_df)
     if rows_dropped > 0:
         print(f"Dropped {rows_dropped} rows with null values")
-
+    
+    # Save updated history
     os.makedirs(os.path.dirname(history_path), exist_ok=True)
     combined_df.to_parquet(history_path, index=False)
-
+    
     print(
-        f"Ingestion complete. Total tracks: {len(combined_df)}, "
-        f"New tracks this run: {len(new_df)}"
+        f"Updated history.parquet: Total tracks: {len(combined_df)}, "
+        f"New tracks added: {len(new_df)}"
     )
+    
     return combined_df
+
 
 if __name__ == "__main__":
     df_history = ingest()
