@@ -36,8 +36,7 @@ def build_next_track_prediction(history_path: str, mood_model_path: str,
         return {
             "mood_cluster_id": None,
             "mood_label": None,
-            "confidence": 0.0,
-            "genre_family": None
+            "confidence": 0.0
         }
     
     # Get most recent session
@@ -113,31 +112,14 @@ def build_next_track_prediction(history_path: str, mood_model_path: str,
     
     mood_label = cluster_info["label"] if cluster_info else f"Cluster {pred_cluster}"
     
-    # Derive genre prediction (simplified: use most common genre in predicted cluster)
-    genre_family = None
-    cluster_tracks = df[df["mood_cluster_id"] == pred_cluster]
-    if len(cluster_tracks) > 0:
-        # Get most common genre from cluster tracks
-        all_genres = []
-        for _, row in cluster_tracks.iterrows():
-            genres = row.get("artist_genres", [])
-            if isinstance(genres, list):
-                all_genres.extend(genres)
-        
-        if all_genres:
-            from collections import Counter
-            most_common = Counter(all_genres).most_common(1)[0][0]
-            genre_family = most_common
-    
     return {
         "mood_cluster_id": pred_cluster,
         "mood_label": mood_label,
-        "confidence": pred_proba,
-        "genre_family": genre_family
+        "confidence": pred_proba
     }
 
 
-def build_recently_played(history_path: str, limit: int = 50) -> List[Dict]:
+def build_recently_played(history_path: str, limit: int = 25) -> List[Dict]:
     if not os.path.exists(history_path):
         return []
     
@@ -254,7 +236,7 @@ def build_dashboard_json(history_path: str = "data/history.parquet",
     session_probs = build_session_probabilities(session_model_path)
     
     print("Building recently played tracks")
-    recently_played = build_recently_played(history_path, limit=50)
+    recently_played = build_recently_played(history_path, limit=25)
     
     # Build mood trajectory (optional - last day aggregated into 15-min bins)
     mood_trajectory = None
