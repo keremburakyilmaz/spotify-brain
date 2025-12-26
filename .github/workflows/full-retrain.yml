@@ -1,0 +1,49 @@
+name: Retrain Pipeline
+
+on:
+  schedule:
+    # Run every day at 12:15 AM UTC 
+    - cron: '15 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Spotify Brain
+      uses: actions/checkout@v4
+      
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: '3.10'
+        environment-file: environment.yml
+        activate-environment: spotify-brain
+        
+    - name: Install dependencies
+      shell: bash -l {0}
+      run: |
+        conda activate spotify-brain
+        pip install -r requirements.txt
+        
+    - name: Run full retrain pipeline
+      shell: bash -l {0}
+      env:
+        SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+      run: |
+        conda activate spotify-brain
+        python -m src.pipelines.run_full_retrain
+
+
+
+
+
+
+
+
+
+
