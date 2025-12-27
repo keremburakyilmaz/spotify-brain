@@ -42,9 +42,12 @@ def assign_tracks_to_existing_clusters(history_path: str = "data/history.parquet
                     for col in ingestion_df.columns:
                         if col not in df.columns:
                             df[col] = None
-                    # Combine and deduplicate
-                    df = pd.concat([df, ingestion_df], ignore_index=True)
-                    df = df.drop_duplicates(subset=["track_id", "played_at"], keep="last")
+                    if len(df) > 0 and len(ingestion_df) > 0:
+                        # Combine and deduplicate
+                        df = pd.concat([df, ingestion_df], ignore_index=True, sort=False)
+                        df = df.drop_duplicates(subset=["track_id", "played_at"], keep="last")
+                    elif len(ingestion_df) > 0:
+                        df = ingestion_df.copy()
     
     if df.empty:
         raise ValueError("History is empty")
