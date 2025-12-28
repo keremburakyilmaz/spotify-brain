@@ -51,14 +51,24 @@ def run_full_retrain():
         mood_metrics = train_mood_model()
         
         print("\n[6/7] Training session classifier")
-        session_metrics = train_session_model()
+        # Use rolling window of 90 days for training
+        session_metrics = train_session_model(rolling_window_days=90)
         
-        print("\n[7/7] Logging metrics and exporting dashboard data")
+        print("\n[7/7] Detecting drift and logging metrics")
+        # Detect drift
+        drift_data = None
+        try:
+            from models.detect_drift import detect_drift
+            drift_data = detect_drift(history_path)
+        except Exception as e:
+            print(f"Warning: Could not detect drift: {e}")
+        
         log_metrics(
             num_tracks=num_tracks,
             num_sessions=num_sessions,
             mood_model_metrics=mood_metrics,
-            session_model_metrics=session_metrics
+            session_model_metrics=session_metrics,
+            drift_data=drift_data
         )
         build_dashboard_json()
         
