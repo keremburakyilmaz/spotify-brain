@@ -64,7 +64,7 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Update Spotify dashboard data [skip ci]"
+          git commit -m "Update Spotify dashboard data"
           git push
           echo "Successfully pushed dashboard data to repository"
         fi
