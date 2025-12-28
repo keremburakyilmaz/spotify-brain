@@ -46,7 +46,6 @@ def build_recently_played(history_path: str, limit: int = 25) -> List[Dict]:
 
 
 def build_mood_trajectory(history_path: str) -> List[Dict]:
-    """Build mood trajectory (last day aggregated into 15-min bins)."""
     if not os.path.exists(history_path):
         return None
     

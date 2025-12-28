@@ -128,23 +128,30 @@ def get_recommended_tracks(
                 continue
             
             # Extract Spotify track ID from ReccoBeats schema
+            # IMPORTANT: "id" field contains ReccoBeats UUID (NOT Spotify ID)
+            # We MUST extract from "href" (Spotify URL) - it's the only reliable source
             spotify_id = None
             
-            # First try the "id" field (Spotify track ID)
-            if "id" in recommended_track:
-                spotify_id = str(recommended_track["id"])
+            # Extract from "href" (Spotify URL) - this is the only reliable source
+            href = recommended_track.get("href", "")
+            if href and "open.spotify.com/track/" in href:
+                try:
+                    spotify_id = href.split("/track/")[1].split("?")[0].split("/")[0]
+                    # Validate it looks like a Spotify ID (22 chars)
+                    if len(spotify_id) != 22:
+                        print(f"[ReccoBeats] Warning: Extracted ID length is {len(spotify_id)}, expected 22: {spotify_id}")
+                        spotify_id = None
+                except Exception as e:
+                    print(f"[ReccoBeats] Error extracting ID from href '{href}': {e}")
+                    spotify_id = None
+            else:
+                print(f"[ReccoBeats] No valid 'href' field in response for track {i+1}")
+                print(f"[ReccoBeats] Available fields: {list(recommended_track.keys())}")
+                print(f"[ReccoBeats] href value: {href}")
             
-            # Fallback: extract from "href" (Spotify URL)
             if not spotify_id:
-                href = recommended_track.get("href", "")
-                if href and "open.spotify.com/track/" in href:
-                    try:
-                        spotify_id = href.split("/track/")[1].split("?")[0].split("/")[0]
-                    except Exception:
-                        pass
-            
-            if not spotify_id:
-                print(f"[ReccoBeats] Could not extract Spotify track ID from recommendation {i+1}")
+                print(f"[ReccoBeats] Could not extract valid Spotify track ID from recommendation {i+1}")
+                print(f"[ReccoBeats] Full track data: {recommended_track}")
                 continue
             
             # Skip if we already have this track
