@@ -1,354 +1,34 @@
-import pandas as pd
-import numpy as np
 import json
 import os
-import pickle
-from datetime import datetime, timedelta, timezone
-from typing import Dict, List, Optional
+from datetime import datetime
+from typing import Dict
 import sys
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from utils.sanitize_json import sanitize_dict, sanitize_json_file
+from export.mood_predictions import build_next_track_prediction
+from export.recommendations import get_recommended_tracks
+from export.session_predictions import build_session_probabilities, build_actual_session_distribution
+from export.history_utils import build_recently_played, build_mood_trajectory
+from ingestion.spotify_ingest import SpotifyIngester
 
 
 def cyclical_encode(value: float, max_value: float) -> tuple:
+    """Cyclical encoding for time features."""
+    import numpy as np
     sin_val = np.sin(2 * np.pi * value / max_value)
     cos_val = np.cos(2 * np.pi * value / max_value)
     return sin_val, cos_val
 
 
 def load_model(model_path: str) -> tuple:
+    """Load a pickled model and return model and feature columns."""
+    import pickle
     with open(model_path, 'rb') as f:
         model_data = pickle.load(f)
     return model_data["model"], model_data["feature_cols"]
-
-
-def build_next_track_prediction(history_path: str, mood_model_path: str, 
-                                mood_clusters_path: str, window_size: int = 3) -> Dict:
-    # Load history
-    df = pd.read_parquet(history_path)
-    df = df.dropna(subset=["mood_cluster_id", "session_id"])
-    df = df.sort_values(["session_id", "played_at"]).reset_index(drop=True)
-    
-    if len(df) < window_size:
-        return {
-            "mood_cluster_id": None,
-            "mood_label": None,
-            "confidence": 0.0
-        }
-    
-    # Get most recent session
-    latest_session_id = df["session_id"].max()
-    session_df = df[df["session_id"] == latest_session_id].copy()
-    
-    if len(session_df) < window_size:
-        # Use last N tracks across sessions
-        session_df = df.tail(window_size).copy()
-    
-    # Get last window_size tracks
-    window_df = session_df.tail(window_size).copy()
-    
-    # Load model
-    model, feature_cols = load_model(mood_model_path)
-    
-    # Build features (same as in build_mood_dataset)
-    audio_features = ["valence", "energy", "danceability", "acousticness", 
-                     "instrumentalness", "tempo_norm"]
-    
-    features = {}
-    
-    # Sequence features
-    for j, (idx, row) in enumerate(window_df.iterrows()):
-        features[f"mood_cluster_{j}"] = int(row["mood_cluster_id"])
-    
-    # Aggregated audio features
-    for feat in audio_features:
-        values = window_df[feat].dropna().values
-        if len(values) > 0:
-            features[f"{feat}_mean"] = float(np.mean(values))
-            features[f"{feat}_std"] = float(np.std(values))
-        else:
-            features[f"{feat}_mean"] = 0.0
-            features[f"{feat}_std"] = 0.0
-    
-    # Time features
-    last_track_time = pd.to_datetime(window_df.iloc[-1]["played_at"])
-    hour_sin, hour_cos = cyclical_encode(last_track_time.hour, 24)
-    day_sin, day_cos = cyclical_encode(last_track_time.dayofweek, 7)
-    
-    features["hour_sin"] = hour_sin
-    features["hour_cos"] = hour_cos
-    features["day_sin"] = day_sin
-    features["day_cos"] = day_cos
-    features["is_weekend"] = 1 if last_track_time.weekday() >= 5 else 0
-    
-    # Session context
-    features["session_position"] = len(session_df)
-    features["session_length"] = len(session_df)
-    features["time_since_session_start"] = 0.0  # Simplified
-    
-    # Current track features
-    for feat in audio_features:
-        val = window_df.iloc[-1][feat]
-        features[f"current_{feat}"] = float(val) if pd.notna(val) else 0.0
-    
-    # Create feature vector in correct order
-    X = np.array([[features.get(col, 0.0) for col in feature_cols]])
-    
-    # Predict
-    pred_cluster = int(model.predict(X)[0])
-    pred_proba = float(model.predict_proba(X)[0][pred_cluster])
-    
-    # Load cluster metadata
-    with open(mood_clusters_path, 'r') as f:
-        clusters_data = json.load(f)
-    
-    cluster_info = next(
-        (c for c in clusters_data["clusters"] if c["cluster_id"] == pred_cluster),
-        None
-    )
-    
-    mood_label = cluster_info["label"] if cluster_info else f"Cluster {pred_cluster}"
-    
-    return {
-        "mood_cluster_id": pred_cluster,
-        "mood_label": mood_label,
-        "confidence": pred_proba
-    }
-
-
-def build_recently_played(history_path: str, limit: int = 25) -> List[Dict]:
-    if not os.path.exists(history_path):
-        return []
-    
-    df = pd.read_parquet(history_path)
-    if df.empty:
-        return []
-    
-    # Ensure played_at is datetime
-    df["played_at"] = pd.to_datetime(df["played_at"])
-    
-    # Sort by played_at descending and take most recent
-    df = df.sort_values("played_at", ascending=False).head(limit)
-    
-    # Build list of track dictionaries
-    recently_played = []
-    for _, row in df.iterrows():
-        track_data = {
-            "track_id": str(row.get("track_id", "")),
-            "track_name": str(row.get("track_name", "")) if pd.notna(row.get("track_name")) else "Unknown Track",
-            "artist_name": str(row.get("artist_name", "")) if pd.notna(row.get("artist_name")) else "Unknown Artist",
-            "played_at": row["played_at"].isoformat() if pd.notna(row["played_at"]) else None,
-        }
-        
-        # Add image_url if available
-        if "image_url" in row and pd.notna(row.get("image_url")):
-            track_data["image_url"] = str(row["image_url"])
-        else:
-            track_data["image_url"] = None
-        
-        # Add mood_cluster_id if available
-        if "mood_cluster_id" in row and pd.notna(row.get("mood_cluster_id")):
-            track_data["mood_cluster_id"] = int(row["mood_cluster_id"])
-        else:
-            track_data["mood_cluster_id"] = None
-        
-        recently_played.append(track_data)
-    
-    return recently_played
-
-
-def build_session_probabilities(session_model_path: str, history_path: str = "data/history.parquet") -> Dict:
-    # Load model
-    model, feature_cols = load_model(session_model_path)
-    
-    # Load history to calculate historical patterns
-    history_df = pd.read_parquet(history_path) if os.path.exists(history_path) else pd.DataFrame()
-    
-    # Get all session starts from history (for calculating historical patterns)
-    session_starts_history = []
-    session_info_dict = {}
-    
-    if not history_df.empty and "session_id" in history_df.columns:
-        history_df["played_at"] = pd.to_datetime(history_df["played_at"])
-        
-        # Get session starts
-        session_starts_df = history_df.groupby("session_id")["played_at"].min().reset_index()
-        session_starts_df["date"] = session_starts_df["played_at"].dt.date
-        session_starts_df["hour"] = session_starts_df["played_at"].dt.hour
-        session_starts_history = set(zip(session_starts_df["date"], session_starts_df["hour"]))
-        
-        # Calculate session durations
-        session_durations = history_df.groupby("session_id").agg({
-            "played_at": ["min", "max"]
-        }).reset_index()
-        session_durations.columns = ["session_id", "start_time", "end_time"]
-        session_durations["duration_minutes"] = (
-            session_durations["end_time"] - session_durations["start_time"]
-        ).dt.total_seconds() / 60
-        
-        # Merge to get session info with dates
-        session_info = session_starts_df.merge(
-            session_durations[["session_id", "duration_minutes"]],
-            on="session_id",
-            how="left"
-        )
-        session_info_dict = {
-            row["session_id"]: {
-                "date": row["date"],
-                "hour": row["hour"],
-                "duration": row["duration_minutes"]
-            }
-            for _, row in session_info.iterrows()
-        }
-    
-    # Get today's date
-    today = datetime.now().date()
-    
-    # Build features for each hour today
-    probabilities = {}
-    
-    for hour in range(24):
-        dt = datetime.combine(today, datetime.min.time().replace(hour=hour))
-        
-        # Build features (same as in build_session_dataset.py)
-        features = {}
-        hour_sin, hour_cos = cyclical_encode(hour, 24)
-        day_sin, day_cos = cyclical_encode(dt.weekday(), 7)
-        
-        features["hour_sin"] = hour_sin
-        features["hour_cos"] = hour_cos
-        features["day_sin"] = day_sin
-        features["day_cos"] = day_cos
-        features["day_of_month"] = dt.day
-        features["is_weekend"] = 1 if dt.weekday() >= 5 else 0
-        
-        # Historical patterns: rolling listening frequency
-        date_7d_ago = today - timedelta(days=7)
-        date_30d_ago = today - timedelta(days=30)
-        
-        # Count sessions in this hour over last 7 days
-        sessions_7d = [
-            (d, h) for d, h in session_starts_history
-            if date_7d_ago <= d < today and h == hour
-        ]
-        features["rolling_listening_frequency_7d"] = len(sessions_7d)
-        
-        # Count sessions in this hour over last 30 days
-        sessions_30d = [
-            (d, h) for d, h in session_starts_history
-            if date_30d_ago <= d < today and h == hour
-        ]
-        features["rolling_listening_frequency_30d"] = len(sessions_30d)
-        
-        # Time since last session (in hours)
-        previous_sessions = [
-            (d, h) for d, h in session_starts_history
-            if d < today or (d == today and h < hour)
-        ]
-        
-        if previous_sessions:
-            last_date, last_hour = max(previous_sessions, key=lambda x: (x[0], x[1]))
-            last_dt = datetime.combine(last_date, datetime.min.time().replace(hour=last_hour))
-            time_diff = (dt - last_dt).total_seconds() / 3600
-            features["time_since_last_session"] = float(time_diff)
-        else:
-            # If no previous session, cap at 7 days (168 hours)
-            if session_starts_history:
-                first_date, first_hour = min(session_starts_history, key=lambda x: (x[0], x[1]))
-                first_dt = datetime.combine(first_date, datetime.min.time().replace(hour=first_hour))
-                time_diff = (dt - first_dt).total_seconds() / 3600
-                features["time_since_last_session"] = min(float(time_diff), 168.0)
-            else:
-                features["time_since_last_session"] = 168.0  # Default to 7 days
-        
-        # Average session duration last 7 days
-        sessions_in_7d = [
-            sid for sid, info in session_info_dict.items()
-            if date_7d_ago <= info["date"] < today
-        ]
-        
-        if sessions_in_7d:
-            durations = [session_info_dict[sid]["duration"] for sid in sessions_in_7d]
-            features["avg_session_duration_last_7d"] = float(np.mean(durations))
-        else:
-            features["avg_session_duration_last_7d"] = 0.0
-        
-        # Total tracks last 7 days
-        if not history_df.empty:
-            tracks_7d = history_df[
-                (history_df["played_at"].dt.date >= date_7d_ago) &
-                (history_df["played_at"].dt.date < today)
-            ]
-            features["total_tracks_last_7d"] = len(tracks_7d)
-        else:
-            features["total_tracks_last_7d"] = 0
-        
-        # Total tracks last 30 days
-        if not history_df.empty:
-            tracks_30d = history_df[
-                (history_df["played_at"].dt.date >= date_30d_ago) &
-                (history_df["played_at"].dt.date < today)
-            ]
-            features["total_tracks_last_30d"] = len(tracks_30d)
-        else:
-            features["total_tracks_last_30d"] = 0
-        
-        # Set default values for any remaining features
-        for col in feature_cols:
-            if col not in features:
-                features[col] = 0.0
-        
-        # Create feature vector
-        X = np.array([[features.get(col, 0.0) for col in feature_cols]])
-        
-        # Predict probability
-        proba = float(model.predict_proba(X)[0][1])
-        probabilities[str(hour)] = proba
-    
-    return probabilities
-
-
-def build_actual_session_distribution(history_path: str = "data/history.parquet") -> Dict:
-    """
-    Calculate actual session start distribution from history and normalize it.
-    Normalizes by max count (so the hour with most sessions becomes 1.0).
-    This avoids the percentage problem where a single session in a day = 100%.
-    """
-    if not os.path.exists(history_path):
-        return {str(hour): 0.0 for hour in range(24)}
-    
-    df = pd.read_parquet(history_path)
-    if df.empty or "session_id" not in df.columns:
-        return {str(hour): 0.0 for hour in range(24)}
-    
-    # Ensure played_at is datetime
-    df["played_at"] = pd.to_datetime(df["played_at"])
-    
-    # Find session starts (first track of each session)
-    session_starts = df.groupby("session_id")["played_at"].min().reset_index()
-    session_starts["hour"] = session_starts["played_at"].dt.hour
-    
-    # Count sessions per hour
-    hour_counts = session_starts["hour"].value_counts().sort_index()
-    
-    # Initialize all hours to 0
-    distribution = {str(hour): 0 for hour in range(24)}
-    
-    # Fill in actual counts
-    for hour, count in hour_counts.items():
-        distribution[str(hour)] = int(count)
-    
-    # Normalize by max count (so max becomes 1.0)
-    max_count = max(distribution.values()) if distribution.values() else 1
-    if max_count > 0:
-        normalized = {hour: float(count) / max_count for hour, count in distribution.items()}
-    else:
-        normalized = {hour: 0.0 for hour in distribution.keys()}
-    
-    return normalized
 
 
 def build_dashboard_json(history_path: str = "data/history.parquet",
@@ -383,47 +63,68 @@ def build_dashboard_json(history_path: str = "data/history.parquet",
         history_path, mood_model_path, mood_clusters_path
     )
     
+    # Get recommended tracks based on predicted mood (3 tracks: centroid match + 2 variations)
+    recommended_tracks = []
+    if next_prediction.get("cluster_centroid") and next_prediction.get("mood_cluster_id") is not None:
+        print("Fetching recommended tracks from ReccoBeats")
+        try:
+            spotify_ingester = SpotifyIngester()
+            recommended_tracks = get_recommended_tracks(
+                next_prediction.get("cluster_centroid"),
+                next_prediction.get("mood_cluster_id"),
+                history_path,
+                spotify_ingester,
+                num_tracks=3
+            )
+        except Exception as e:
+            print(f"Warning: Could not fetch recommended tracks: {e}")
+            recommended_tracks = []
+    
+    # Add recommended tracks to next_prediction
+    if recommended_tracks:
+        next_prediction["recommended_tracks"] = recommended_tracks
+    
     print("Building session probabilities")
     session_probs = build_session_probabilities(session_model_path, history_path)
+    
+    # Build top hours (top 3 predicted hours with probabilities)
+    top_hours = []
+    if session_probs:
+        # Sort hours by probability
+        sorted_hours = sorted(session_probs.items(), key=lambda x: x[1], reverse=True)
+        top_hours = [
+            {
+                "hour": int(hour),
+                "probability": float(prob)
+            }
+            for hour, prob in sorted_hours[:3]
+        ]
     
     print("Building actual session distribution")
     session_actual = build_actual_session_distribution(history_path)
     
+    # Build drift data
+    print("Detecting drift")
+    drift_data = None
+    try:
+        from models.detect_drift import detect_drift
+        drift_data = detect_drift(history_path)
+    except Exception as e:
+        print(f"Warning: Could not detect drift: {e}")
+        drift_data = None
+    
     print("Building recently played tracks")
     recently_played = build_recently_played(history_path, limit=25)
     
-    # Build mood trajectory (optional - last day aggregated into 15-min bins)
-    mood_trajectory = None
-    if os.path.exists(history_path):
-        df = pd.read_parquet(history_path)
-        if not df.empty:
-            df["played_at"] = pd.to_datetime(df["played_at"])
-            # Ensure yesterday is timezone-aware (UTC) to match played_at
-            yesterday = datetime.now(timezone.utc) - timedelta(days=1)
-            recent_df = df[df["played_at"] >= yesterday]
-            
-            if len(recent_df) > 0:
-                # Aggregate into 15-minute bins
-                recent_df["time_bin"] = recent_df["played_at"].dt.floor("15T")
-                binned = recent_df.groupby("time_bin").agg({
-                    "valence": "mean",
-                    "energy": "mean"
-                }).reset_index()
-                
-                mood_trajectory = [
-                    {
-                        "time": row["time_bin"].isoformat(),
-                        "valence": float(row["valence"]) if pd.notna(row["valence"]) else 0.5,
-                        "energy": float(row["energy"]) if pd.notna(row["energy"]) else 0.5
-                    }
-                    for _, row in binned.iterrows()
-                ]
+    print("Building mood trajectory")
+    mood_trajectory = build_mood_trajectory(history_path)
     
     # Build dashboard data structure
     dashboard_data = {
         "generated_at": datetime.utcnow().isoformat(),
         "next_prediction": next_prediction,
         "session_probs": session_probs,
+        "top_hours": top_hours,
         "session_actual": session_actual,
         "mood_clusters": mood_clusters["clusters"],
         "mood_trajectory": mood_trajectory,
@@ -433,6 +134,10 @@ def build_dashboard_json(history_path: str = "data/history.parquet",
             "history": recent_metrics
         }
     }
+    
+    # Add drift data if available
+    if drift_data:
+        dashboard_data["drift"] = drift_data
     
     # Sanitize NaN values before saving
     dashboard_data = sanitize_dict(dashboard_data)
@@ -452,9 +157,3 @@ def build_dashboard_json(history_path: str = "data/history.parquet",
 
 if __name__ == "__main__":
     build_dashboard_json()
-
-
-
-
-
-
