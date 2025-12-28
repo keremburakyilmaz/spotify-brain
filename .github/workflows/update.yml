@@ -1,0 +1,71 @@
+name: Update Pipeline
+
+on:
+  schedule:
+    # Run at :00 and :30 of every hour
+    - cron: '0,30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Spotify Brain Repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: '3.10'
+        environment-file: environment.yml
+        activate-environment: spotify-brain
+        
+    - name: Install dependencies
+      shell: bash -l {0}
+      run: |
+        conda activate spotify-brain
+        pip install -r requirements.txt
+        
+    - name: Run update pipeline
+      shell: bash -l {0}
+      env:
+        SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+      run: |
+        conda activate spotify-brain
+        python -m src.pipelines.run_update
+        
+    - name: Checkout Personal Website Repository
+      uses: actions/checkout@v4
+      with:
+        repository: keremburakyilmaz/personal-website
+        token: ${{ secrets.WEBSITE_REPO_PAT }}
+        path: website-repo
+        
+    - name: Copy dashboard data
+      run: |
+        if [ ! -f "export/dashboard_data.json" ]; then
+          echo "Error: dashboard_data.json not found!"
+          exit 1
+        fi
+        mkdir -p website-repo/public/spotify
+        cp export/dashboard_data.json website-repo/public/spotify/dashboard_data.json
+        echo "Copied dashboard_data.json to website-repo/public/spotify/"
+        
+    - name: Commit and push to Personal Website
+      working-directory: website-repo
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add public/spotify/dashboard_data.json
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update Spotify dashboard data [skip ci]"
+          git push
+          echo "Successfully pushed dashboard data to repository"
+        fi
+
