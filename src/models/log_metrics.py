@@ -15,7 +15,8 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
                 num_tracks: int = 0,
                 num_sessions: int = 0,
                 mood_model_metrics: Optional[Dict] = None,
-                session_model_metrics: Optional[Dict] = None) -> None:
+                session_model_metrics: Optional[Dict] = None,
+                drift_data: Optional[Dict] = None) -> None:
     if run_at is None:
         run_at = datetime.utcnow()
     
@@ -45,13 +46,48 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
         }
     
     if session_model_metrics:
-        # Extract all session model metrics, preserving None for missing values
+        # Extract all session model metrics, including evaluation results
         entry["session_model"] = {
             "train_roc_auc": session_model_metrics.get("train_roc_auc"),
             "val_roc_auc": session_model_metrics.get("val_roc_auc"),
             "train_accuracy": session_model_metrics.get("train_accuracy"),
-            "val_accuracy": session_model_metrics.get("val_accuracy")
+            "val_accuracy": session_model_metrics.get("val_accuracy"),
+            "n_features": session_model_metrics.get("n_features"),
+            "n_train": session_model_metrics.get("n_train"),
+            "n_val": session_model_metrics.get("n_val")
         }
+        
+        # Add PR-AUC and baseline metrics from evaluation
+        evaluation = session_model_metrics.get("evaluation")
+        if evaluation:
+            model_metrics = evaluation.get("model_metrics", {})
+            entry["session_model"]["val_pr_auc"] = model_metrics.get("pr_auc")
+            entry["session_model"]["val_f1"] = model_metrics.get("f1")
+            entry["session_model"]["calibration_error"] = model_metrics.get("calibration_error")
+            
+            # Baseline comparisons
+            baseline_neg = evaluation.get("baseline_always_negative", {})
+            baseline_hist = evaluation.get("baseline_historical_hour", {})
+            entry["session_model"]["baseline_neg_pr_auc"] = baseline_neg.get("pr_auc")
+            entry["session_model"]["baseline_hist_pr_auc"] = baseline_hist.get("pr_auc")
+            
+            # Comparison flags
+            comparison = evaluation.get("comparison", {})
+            entry["session_model"]["model_beats_neg"] = comparison.get("model_beats_neg")
+            entry["session_model"]["model_beats_hist"] = comparison.get("model_beats_hist")
+            
+            # Per-hour metrics (summary)
+            per_hour = evaluation.get("per_hour_metrics", {})
+            entry["session_model"]["per_hour_metrics"] = per_hour
+        
+        # Add model metadata if available
+        model_metadata = session_model_metrics.get("model_metadata")
+        if model_metadata:
+            entry["session_model"]["model_metadata"] = model_metadata
+    
+    # Add drift data if provided
+    if drift_data:
+        entry["drift"] = drift_data
     
     # Append to history
     history.append(entry)
