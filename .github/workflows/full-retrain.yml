@@ -37,4 +37,17 @@ jobs:
       run: |
         conda activate spotify-brain
         python -m src.pipelines.run_full_retrain
+    
+    - name: Commit and push models and metrics
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add models/*.pkl models/*.json metrics/*.json
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update models and metrics from full retrain [skip ci]"
+          git push
+          echo "Successfully pushed models and metrics to repository"
+        fi
 
