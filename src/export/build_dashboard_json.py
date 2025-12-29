@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import Dict
 import sys
 
-# Add parent directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from utils.sanitize_json import sanitize_dict, sanitize_json_file
@@ -16,7 +15,6 @@ from ingestion.spotify_ingest import SpotifyIngester
 
 
 def cyclical_encode(value: float, max_value: float) -> tuple:
-    """Cyclical encoding for time features."""
     import numpy as np
     sin_val = np.sin(2 * np.pi * value / max_value)
     cos_val = np.cos(2 * np.pi * value / max_value)
@@ -24,7 +22,6 @@ def cyclical_encode(value: float, max_value: float) -> tuple:
 
 
 def load_model(model_path: str) -> tuple:
-    """Load a pickled model and return model and feature columns."""
     import pickle
     with open(model_path, 'rb') as f:
         model_data = pickle.load(f)
