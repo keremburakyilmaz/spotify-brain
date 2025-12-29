@@ -15,6 +15,7 @@ from features.build_mood_clusters_incremental import (
     get_latest_ingestion_file
 )
 from export.build_dashboard_json import build_dashboard_json
+from models.log_metrics import log_metrics
 
 
 def cyclical_encode(value: float, max_value: float) -> tuple:
@@ -197,12 +198,30 @@ def run_update():
         update_history_from_ingestion(latest_ingestion_file)
         
         # Step 5: Build and export dashboard data
-        print("\n[5/5] Building and exporting dashboard data")
+        print("\n[5/6] Building and exporting dashboard data")
         try:
             build_dashboard_json()
         except Exception as e:
             print(f"Warning: Could not build dashboard: {e}")
             print("Continuing without dashboard update")
+        
+        # Step 6: Log metrics (track counts, drift detection)
+        print("\n[6/6] Detecting drift and logging metrics")
+        drift_data = None
+        try:
+            from models.detect_drift import detect_drift
+            drift_data = detect_drift("data/history.parquet")
+        except Exception as e:
+            print(f"Warning: Could not detect drift: {e}")
+        
+        # Log metrics for update pipeline (no model metrics since we don't train)
+        log_metrics(
+            num_tracks=num_tracks,
+            num_sessions=num_sessions,
+            mood_model_metrics=None,  # No training in update pipeline
+            session_model_metrics=None,  # No training in update pipeline
+            drift_data=drift_data
+        )
         
         print("\n" + "=" * 60)
         print(f"Update Pipeline Completed Successfully")
