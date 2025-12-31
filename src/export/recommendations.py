@@ -128,11 +128,9 @@ def get_recommended_tracks(
                 continue
             
             # Extract Spotify track ID from ReccoBeats schema
-            # IMPORTANT: "id" field contains ReccoBeats UUID (NOT Spotify ID)
-            # We MUST extract from "href" (Spotify URL) - it's the only reliable source
             spotify_id = None
             
-            # Extract from "href" (Spotify URL) - this is the only reliable source
+            # Primary: extract from "href" (Spotify URL)
             href = recommended_track.get("href", "")
             if href and "open.spotify.com/track/" in href:
                 try:
