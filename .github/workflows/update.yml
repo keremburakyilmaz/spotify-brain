@@ -76,3 +76,19 @@ jobs:
           git commit -m "Update Spotify dashboard data"
           git push
           echo "Successfully pushed dashboard data to personal-website"
+
+      - name: Commit and push all changes to Spotify Brain Repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Add all changes (including deletions)
+          git add -A
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update data and metrics from incremental update"
+            git push
+            echo "Successfully pushed all changes to spotify-brain repository"
+          fi

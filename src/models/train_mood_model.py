@@ -35,6 +35,11 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
     X = df[feature_cols].values
     y = df[target_col].values
     
+    # Calculate number of classes from full dataset (before splitting)
+    unique_classes = np.unique(y)
+    n_classes = len(unique_classes)
+    print(f"Number of classes: {n_classes} (classes: {unique_classes.tolist()})")
+    
     if pd.isna(X).any():
         print("Warning: Missing values in features, filling with 0")
         X = np.nan_to_num(X, nan=0.0)
@@ -67,7 +72,42 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
                 X, y, test_size=test_size, random_state=random_state
             )
     
+    train_classes = np.unique(y_train)
+    val_classes = np.unique(y_val)
+    missing_in_train = set(unique_classes) - set(train_classes)
+    
+    if len(missing_in_train) > 0:
+        print(f"Ensuring all {n_classes} classes are in training set (moving samples from validation)...")
+        print(f"  Training classes before: {sorted(train_classes)}")
+        print(f"  Missing classes: {sorted(missing_in_train)}")
+        # Convert to DataFrame for easier manipulation
+        train_df = pd.DataFrame(X_train, columns=feature_cols)
+        train_df['target'] = y_train
+        val_df = pd.DataFrame(X_val, columns=feature_cols)
+        val_df['target'] = y_val
+        
+        # For each missing class, move one sample from validation to training
+        for missing_class in missing_in_train:
+            # Find samples of this class in validation
+            class_samples = val_df[val_df['target'] == missing_class]
+            if len(class_samples) > 0:
+                # Move first sample to training
+                sample_to_move = class_samples.iloc[0:1]
+                train_df = pd.concat([train_df, sample_to_move], ignore_index=True)
+                val_df = val_df.drop(sample_to_move.index)
+                print(f"  Moved 1 sample of class {missing_class} from validation to training")
+        
+        # Convert back to numpy arrays
+        X_train = train_df[feature_cols].values
+        y_train = train_df['target'].values
+        X_val = val_df[feature_cols].values
+        y_val = val_df['target'].values
+        
+        print(f"  Training classes after: {sorted(np.unique(y_train))}")
+        print(f"After adjustment - Train samples: {len(X_train)}, Validation samples: {len(X_val)}")
+    
     print(f"Train samples: {len(X_train)}, Validation samples: {len(X_val)}")
+    print(f"Train classes: {sorted(np.unique(y_train))}, Val classes: {sorted(np.unique(y_val))}")
     
     print("Training XGBoost classifier")
     
@@ -76,7 +116,9 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
         max_depth=6,
         learning_rate=0.1,
         random_state=random_state,
-        eval_metric='mlogloss'
+        eval_metric='mlogloss',
+        objective='multi:softprob',  # Explicitly set multi-class objective
+        num_class=n_classes  # Explicitly set number of classes
     )
     
     model.fit(

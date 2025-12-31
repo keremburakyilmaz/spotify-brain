@@ -73,16 +73,19 @@ jobs:
         git push
         echo "Successfully pushed dashboard data to personal-website"
     
-    - name: Commit and push models and metrics
+    - name: Commit and push all changes to Spotify Brain Repository
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add models/*.pkl models/*.json metrics/*.json
+        
+        # Add all changes (including deletions)
+        git add -A
+        
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Update models and metrics from full retrain"
+          git commit -m "Update models, data, and metrics from full retrain"
           git push
-          echo "Successfully pushed models and metrics to repository"
+          echo "Successfully pushed all changes to spotify-brain repository"
         fi
 
