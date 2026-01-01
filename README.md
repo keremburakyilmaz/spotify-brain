@@ -13,6 +13,9 @@ A machine learning system that analyzes Spotify listening history to predict moo
 - [Model Training](#model-training)
 - [Evaluation](#evaluation)
 - [Workflows](#workflows)
+  - [Update Pipeline](#update-pipeline)
+  - [Full Retrain Pipeline](#full-retrain-pipeline)
+  - [Dashboard Deployment](#dashboard-deployment)
 
 ## Overview
 
@@ -327,7 +330,7 @@ The system monitors for data drift by comparing recent data (last 7 days) to pri
 4. **Update History**: Merge new tracks into `history.parquet` (removing nulls)
 5. **Build Dashboard**: Generate dashboard JSON for visualization
 6. **Detect Drift**: Monitor for data drift and log metrics
-7. **Deploy Dashboard**: Copy dashboard data to personal website repository
+7. **Deploy Dashboard**: Copy dashboard data to personal website repository (see [Dashboard Deployment](#dashboard-deployment))
 8. **Commit Changes**: Push all updates to repository
 
 **Key Characteristics**:
@@ -348,7 +351,7 @@ The system monitors for data drift by comparing recent data (last 7 days) to pri
 6. **Train Session Model**: Retrain session classifier with 90-day rolling window
 7. **Detect Drift**: Monitor for data drift and log metrics
 8. **Build Dashboard**: Generate dashboard JSON
-9. **Deploy Dashboard**: Copy dashboard data to personal website repository
+9. **Deploy Dashboard**: Copy dashboard data to personal website repository (see [Dashboard Deployment](#dashboard-deployment))
 10. **Commit Changes**: Push all updates including new models
 
 **Key Characteristics**:
@@ -356,12 +359,18 @@ The system monitors for data drift by comparing recent data (last 7 days) to pri
 - Adaptive: Clusters adapt to changing listening patterns
 - Comprehensive: Updates all models and datasets
 
-### Workflow Configuration
+### Dashboard Deployment
 
-Both workflows:
-- Use GitHub Actions with Ubuntu runners
-- Set up Conda environment from `environment.yml`
-- Install Python dependencies from `requirements.txt`
-- Use secrets for Spotify API credentials
-- Deploy dashboard data to a separate website repository
-- Commit and push all changes automatically
+Both pipelines automatically deploy the generated dashboard data to a separate website repository:
+
+**Process**:
+1. **Checkout Website Repository**: Uses GitHub Actions to checkout the personal website repository (`keremburakyilmaz/personal-website`) using a Personal Access Token (PAT) stored in GitHub secrets (`WEBSITE_REPO_PAT`)
+2. **Copy Dashboard Data**: Copies `export/dashboard_data.json` to `website-repo/src/assets/dashboard_data.json`
+3. **Commit and Push**: 
+   - Configures git with GitHub Actions bot credentials
+   - Stages the dashboard file
+   - Commits with message "Update Spotify dashboard data" (update pipeline) or "Update Spotify dashboard data from full retrain" (retrain pipeline)
+   - Pushes changes to the website repository
+   - Skips commit if no changes are detected
+
+**Result**: The dashboard data is automatically available in the website repository for rendering in the frontend application.
