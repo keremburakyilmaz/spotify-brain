@@ -27,6 +27,21 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
     else:
         history = []
     
+    # If no model metrics provided, preserve the most recent ones from history
+    preserved_mood_metrics = None
+    preserved_session_metrics = None
+    if mood_model_metrics is None or session_model_metrics is None:
+        # Find the most recent entry with model metrics
+        for hist_entry in reversed(history):
+            if mood_model_metrics is None and "mood_model" in hist_entry and preserved_mood_metrics is None:
+                preserved_mood_metrics = hist_entry.get("mood_model")
+            if session_model_metrics is None and "session_model" in hist_entry and preserved_session_metrics is None:
+                preserved_session_metrics = hist_entry.get("session_model")
+            # Stop if we found both metrics we need
+            if (mood_model_metrics is not None or preserved_mood_metrics is not None) and \
+               (session_model_metrics is not None or preserved_session_metrics is not None):
+                break
+    
     # Build metrics entry
     entry = {
         "run_at": run_at.isoformat(),
@@ -34,6 +49,7 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
         "num_sessions": num_sessions
     }
     
+    # Use provided metrics if available, otherwise use preserved ones
     if mood_model_metrics:
         # Extract all mood model metrics, preserving None for missing values
         entry["mood_model"] = {
@@ -44,6 +60,9 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
             "train_roc_auc": mood_model_metrics.get("train_roc_auc"),
             "val_roc_auc": mood_model_metrics.get("val_roc_auc")
         }
+    elif preserved_mood_metrics:
+        # Use preserved metrics from history (already formatted)
+        entry["mood_model"] = preserved_mood_metrics
     
     if session_model_metrics:
         # Extract all session model metrics, including evaluation results
@@ -84,6 +103,9 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
         model_metadata = session_model_metrics.get("model_metadata")
         if model_metadata:
             entry["session_model"]["model_metadata"] = model_metadata
+    elif preserved_session_metrics:
+        # Use preserved metrics from history (already formatted)
+        entry["session_model"] = preserved_session_metrics
     
     # Add drift data if provided
     if drift_data:
