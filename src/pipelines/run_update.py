@@ -167,9 +167,6 @@ def run_update():
             print("No new tracks found. Exiting successfully.")
             return
         
-        num_tracks = len(df)
-        num_sessions = df["session_id"].nunique() if "session_id" in df.columns else 0
-        
         # Get the latest ingestion file path
         latest_ingestion_file = get_latest_ingestion_file()
         if not latest_ingestion_file:
@@ -197,6 +194,17 @@ def run_update():
         print("\n[4/5] Updating history.parquet (removing null values)")
         update_history_from_ingestion(latest_ingestion_file)
         
+        # Get total track count from history.parquet (the training dataset)
+        # This represents the number of tracks the models were trained on
+        history_path = "data/history.parquet"
+        if os.path.exists(history_path):
+            history_df = pd.read_parquet(history_path)
+            num_tracks = len(history_df)
+            num_sessions = history_df["session_id"].nunique() if "session_id" in history_df.columns else 0
+        else:
+            num_tracks = 0
+            num_sessions = 0
+        
         # Step 5: Build and export dashboard data
         print("\n[5/6] Building and exporting dashboard data")
         try:
@@ -210,11 +218,12 @@ def run_update():
         drift_data = None
         try:
             from models.detect_drift import detect_drift
-            drift_data = detect_drift("data/history.parquet")
+            drift_data = detect_drift(history_path)
         except Exception as e:
             print(f"Warning: Could not detect drift: {e}")
         
         # Log metrics for update pipeline (no model metrics since we don't train)
+        # num_tracks represents the total training dataset size
         log_metrics(
             num_tracks=num_tracks,
             num_sessions=num_sessions,
@@ -225,7 +234,7 @@ def run_update():
         
         print("\n" + "=" * 60)
         print(f"Update Pipeline Completed Successfully")
-        print(f"Processed {num_tracks} tracks from {num_sessions} sessions")
+        print(f"Total tracks in training dataset: {num_tracks} tracks from {num_sessions} sessions")
         print("=" * 60)
         
     except Exception as e:
