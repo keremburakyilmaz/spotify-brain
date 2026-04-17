@@ -363,7 +363,7 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
 
     print("Fetching audio features from ReccoBeats")
     id_to_label = {
-        r["track_id"]: f'{r.get("track_name","").strip()} — {r.get("artist_name","").strip()}'
+        r["track_id"]: f'{r.get("track_name","").strip()} - {r.get("artist_name","").strip()}'
         for _, r in new_df.iterrows()
         if pd.notna(r.get("track_id"))
     }

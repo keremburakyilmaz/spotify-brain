@@ -374,3 +374,23 @@ Both pipelines automatically deploy the generated dashboard data to a separate w
    - Skips commit if no changes are detected
 
 **Result**: The dashboard data is automatically available in the website repository for rendering in the frontend application.
+
+### Why GitHub Actions (and not Airflow) in Production
+
+The repository ships a local Airflow setup under [`airflow/`](airflow/) that mirrors both pipelines as per-step DAGs. It is kept as a **development and learning tool**, not the production scheduler. GitHub Actions runs the real pipelines.
+
+**Why GitHub Actions won for production:**
+
+- **Always-on, zero infra.** GitHub's runners are on 24/7 and free for this workload. Airflow would require a machine that is always on — a VPS, a managed service (MWAA, Astronomer, Cloud Composer), or a home server. The operational cost outweighs the feature gains for a pipeline this small.
+- **The pipeline is linear and small.** Per-step retries, XComs, and a DAG UI are real Airflow advantages, but the update pipeline is seven sequential steps over a few hundred tracks. A failed run is cheaper to re-trigger than to debug task-by-task.
+- **Secrets and git pushes are native.** The website-repo deploy uses a GitHub PAT and a second `actions/checkout`. Replicating that from Airflow would mean mounting SSH keys or PATs into the container and doing git operations there — more moving parts, more things to secure.
+- **Idempotency lives in the code, not the scheduler.** Both scripts work off "whatever is in `history.parquet` right now" and dedupe on `(track_id, played_at)`. That makes Airflow's backfill superpower (re-running per logical date) not useful here — running the same script twice for two different logical dates produces the same output.
+
+**Why Airflow is worth keeping around anyway:**
+
+- **Per-step visibility during development.** The DAG UI makes it obvious which step in a seven-step pipeline is slow or flaky. `stdout` in a GitHub Actions log is not the same tool.
+- **Retry a single task without re-running everything.** If `train_session_model` fails with an OOM, Airflow re-runs only that task. GH Actions re-runs the whole job.
+- **Parallel branches are free.** The full retrain DAG trains the mood and session models in parallel; the GH Actions workflow does them sequentially. On a bigger dataset this would matter.
+- **Backfill is a real primitive.** If the pipeline were rewritten to be date-scoped (process data *as of* a logical date), Airflow could rebuild arbitrary historical ranges with one command. GH Actions cannot.
+
+The short version: **GitHub Actions is the right answer for this pipeline today; Airflow is the right answer once the pipeline is bigger, the tasks are date-scoped, and there is already infrastructure to run the scheduler on.** The local Airflow DAGs exist to make that migration a config change, not a rewrite.
