@@ -381,10 +381,10 @@ The repository ships a local Airflow setup under [`airflow/`](airflow/) that mir
 
 **Why GitHub Actions won for production:**
 
-- **Always-on, zero infra.** GitHub's runners are on 24/7 and free for this workload. Airflow would require a machine that is always on — a VPS, a managed service (MWAA, Astronomer, Cloud Composer), or a home server. The operational cost outweighs the feature gains for a pipeline this small.
+- **Always-on, zero infra.** GitHub's runners are on 24/7 and free for this workload. Airflow would require a machine that is always on - a VPS, a managed service (MWAA, Astronomer, Cloud Composer), or a home server. The operational cost outweighs the feature gains for a pipeline this small.
 - **The pipeline is linear and small.** Per-step retries, XComs, and a DAG UI are real Airflow advantages, but the update pipeline is seven sequential steps over a few hundred tracks. A failed run is cheaper to re-trigger than to debug task-by-task.
 - **Secrets and git pushes are native.** The website-repo deploy uses a GitHub PAT and a second `actions/checkout`. Replicating that from Airflow would mean mounting SSH keys or PATs into the container and doing git operations there — more moving parts, more things to secure.
-- **Idempotency lives in the code, not the scheduler.** Both scripts work off "whatever is in `history.parquet` right now" and dedupe on `(track_id, played_at)`. That makes Airflow's backfill superpower (re-running per logical date) not useful here — running the same script twice for two different logical dates produces the same output.
+- **Idempotency lives in the code, not the scheduler.** Both scripts work off "whatever is in `history.parquet` right now" and dedupe on `(track_id, played_at)`. That makes Airflow's backfill superpower (re-running per logical date) not useful here - running the same script twice for two different logical dates produces the same output.
 
 **Why Airflow is worth keeping around anyway:**
 
