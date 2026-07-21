@@ -37,6 +37,34 @@ The ingestion process (`src/ingestion/spotify_ingest.py`) fetches recently playe
 5. **Track Metadata**: Fetches track names, artist names, and album artwork from Spotify's `/v1/tracks` endpoint
 6. **Session Assignment**: Groups tracks into listening sessions based on a 30-minute gap threshold
 
+### Spotify Reauthorization
+
+Spotify refresh tokens issued on behalf of a user expire six months after the
+user originally authorizes the app. Refreshing an access token does not extend
+that lifetime. When Spotify returns `invalid_grant`, the pipelines stop without
+retrying because a new user authorization is required.
+
+To generate a new token for this repository:
+
+1. In the app's Spotify Developer Dashboard settings, add this exact Redirect URI:
+   `http://127.0.0.1:8888/callback`.
+2. Put `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` in your local `.env` file.
+3. Authenticate GitHub CLI with `gh auth login`, then run:
+
+   ```bash
+   python3 scripts/spotify_reauthorize.py --github-secret
+   ```
+
+4. Complete Spotify sign-in in the browser and rerun the failed GitHub Actions
+   workflow. The helper requests only the `user-read-recently-played` scope and
+   updates the repository's `SPOTIFY_REFRESH_TOKEN` Actions secret without
+   printing the token.
+
+If GitHub CLI is unavailable, omit `--github-secret`; the helper prints the new
+token so it can be copied into **Repository settings > Secrets and variables >
+Actions > SPOTIFY_REFRESH_TOKEN**. Never commit that value. Repeat this process
+whenever the token expires (at least once every six months).
+
 ### Which Features We Are Ingesting
 
 The system ingests the following features for each track:

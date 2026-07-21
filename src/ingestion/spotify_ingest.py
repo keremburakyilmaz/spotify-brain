@@ -9,6 +9,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+class SpotifyReauthorizationRequired(RuntimeError):
+    """Raised when Spotify can no longer refresh the user's authorization."""
+
+
 def _chunked(iterable: Iterable, size: int) -> List[List]:
     lst = list(iterable)
     return [lst[i : i + size] for i in range(0, len(lst), size)]
@@ -43,21 +48,39 @@ class SpotifyIngester:
         data = {
             "grant_type": "refresh_token",
             "refresh_token": self.refresh_token,
-            "client_id": self.client_id,
-            "client_secret": self.client_secret,
         }
 
-        response = requests.post(url, data=data)
+        response = requests.post(
+            url,
+            auth=(self.client_id, self.client_secret),
+            data=data,
+            timeout=30,
+        )
         if response.status_code != 200:
             error_msg = "Unknown error"
+            error_code = None
             try:
                 error_data = response.json()
+                error_code = error_data.get("error")
                 error_msg = error_data.get(
                     "error_description",
-                    error_data.get("error", str(response.status_code)),
+                    error_code or str(response.status_code),
                 )
             except Exception:
                 error_msg = response.text or f"HTTP {response.status_code}"
+
+            if error_code == "invalid_grant":
+                # An expired/revoked refresh token is terminal. Retrying cannot
+                # repair it; the user must complete Authorization Code flow again.
+                self.access_token = None
+                self.token_expires_at = 0.0
+                self.refresh_token = None
+                raise SpotifyReauthorizationRequired(
+                    "Spotify rejected SPOTIFY_REFRESH_TOKEN with invalid_grant. "
+                    "The token is expired, revoked, or otherwise invalid and must "
+                    "not be retried. Run `python3 scripts/spotify_reauthorize.py "
+                    "--github-secret`, then rerun the failed workflow."
+                )
 
             raise ValueError(
                 "Failed to refresh access token: "
@@ -68,6 +91,9 @@ class SpotifyIngester:
 
         token_data = response.json()
         self.access_token = token_data["access_token"]
+        # Spotify may rotate the refresh token. Use the new value for the rest
+        # of this process; when omitted, the existing token remains valid.
+        self.refresh_token = token_data.get("refresh_token", self.refresh_token)
         expires_in = token_data.get("expires_in", 3600)
         self.token_expires_at = (
             time.time() + expires_in - self.TOKEN_BUFFER_SECONDS
