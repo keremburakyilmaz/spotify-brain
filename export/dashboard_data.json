@@ -1,29 +1,35 @@
 {
-  "generated_at": "2026-08-11T02:28:01.838070",
+  "generated_at": "2026-08-11T03:46:59.594199",
   "next_prediction": {
-    "mood_cluster_id": 0,
-    "mood_label": "High energy, neutral",
-    "confidence": 0.9401053786277771,
+    "mood_cluster_id": 2,
+    "mood_label": "Medium energy, negative",
+    "confidence": 0.4674852788448334,
     "cluster_centroid": {
-      "valence": 0.5044220545977012,
-      "energy": 0.6936939655172413,
-      "danceability": 0.5825747126436781,
-      "acousticness": 0.08723609553160955,
-      "instrumentalness": 0.0383122680387933,
-      "tempo_norm": 0.4786875545977012
+      "valence": 0.313614,
+      "energy": 0.586373,
+      "danceability": 0.481313,
+      "acousticness": 0.285814934,
+      "instrumentalness": 0.7922699999999998,
+      "tempo_norm": 0.51321874
     },
     "recommended_tracks": [
       {
-        "track_id": "4KVYz4U1Vm3pvjhhhS1E6s",
-        "track_name": "davina mccall",
-        "artist_name": "Wet Leg",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e022f9e981ef2f67e481a6bac03"
+        "track_id": "5u1vw4nmCG8iuerg6ppBf0",
+        "track_name": "Fast Life",
+        "artist_name": "GEE LEE, India Shan",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e025fcf6add4b8bb7f63d357408"
       },
       {
-        "track_id": "2G2YzndIA6jeWFPBXhUjh5",
-        "track_name": "Be My Baby",
-        "artist_name": "The Ronettes",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e024694c5b97d3a88efb5fc71b5"
+        "track_id": "43UV5Uk0ntzH6MP8Rx1RKh",
+        "track_name": "The Devil Wears a Suit and Tie",
+        "artist_name": "Colter Wall",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02664369d876deb40cedc5cffa"
+      },
+      {
+        "track_id": "0ofMkI3jzmGCElAOgOLeo3",
+        "track_name": "The Rhythm of the Night",
+        "artist_name": "Corona",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02f94b2a29ccc364e8faedce10"
       }
     ]
   },
@@ -166,9 +172,22 @@
       "time": "2026-08-10T14:30:00+00:00",
       "valence": 0.5084333333333333,
       "energy": 0.7403333333333334
+    },
+    {
+      "time": "2026-08-10T14:45:00+00:00",
+      "valence": 0.556,
+      "energy": 0.754
     }
   ],
   "recently_played": [
+    {
+      "track_id": "7KV7xwHTJbzbwGQEHLIzR8",
+      "track_name": "Christmas Kids",
+      "artist_name": "Roar",
+      "played_at": "2026-08-10T14:50:15.157000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e027ffa4709d9debeacb9723a56",
+      "mood_cluster_id": 0
+    },
     {
       "track_id": "2K70ZV0Ls65Kkj0WUEfHlz",
       "track_name": "Kerosene",
@@ -359,14 +378,6 @@
       "artist_name": "Dutch Melrose",
       "played_at": "2026-08-09T09:13:51.304000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e029bd54573540bccf89ed1b2f7",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "1NXbNEAcPvY5G1xvfN57aA",
-      "track_name": "Dracula",
-      "artist_name": "Tame Impala",
-      "played_at": "2026-08-09T09:03:09.333000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02208500450dcd0fd294d7bd3b",
       "mood_cluster_id": 0
     }
   ],
@@ -3072,12 +3083,12 @@
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 23.5996601010101,
-        "recent_std": 30.448259153904825,
+        "recent_mean": 23.915138383838382,
+        "recent_std": 30.599327555509312,
         "prior_mean": 20.31360426356589,
         "prior_std": 24.226739790399222,
-        "mean_pct_change": 16.176626239283507,
-        "std_pct_change": 25.680382161743115
+        "mean_pct_change": 17.72966566416842,
+        "std_pct_change": 26.303942751865744
       },
       "sessions_per_day": {
         "recent_mean": 4.125,
@@ -3088,12 +3099,12 @@
         "std_pct_change": -8.519763377774444
       },
       "tracks_per_day": {
-        "recent_mean": 16.0,
-        "recent_std": 9.16515138991168,
+        "recent_mean": 16.125,
+        "recent_std": 9.088969963642745,
         "prior_mean": 11.964285714285714,
         "prior_std": 12.128720763004596,
-        "mean_pct_change": 33.7313432835821,
-        "std_pct_change": -24.434311177585094
+        "mean_pct_change": 34.77611940298508,
+        "std_pct_change": -25.06241885487045
       },
       "start_hour_entropy": {
         "recent": 3.6950206341166103,
@@ -3104,7 +3115,7 @@
       "drift_summary": {
         "drift_detected": true,
         "threshold": 20.0,
-        "max_pct_change": 34.302325581395344
+        "max_pct_change": 34.77611940298508
       }
     },
     "label_drift": {
@@ -3247,6 +3258,6 @@
       }
     },
     "overall_drift_detected": true,
-    "detection_date": "2026-08-11T02:28:01.828707"
+    "detection_date": "2026-08-11T03:46:59.578476"
   }
 }
