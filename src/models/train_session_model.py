@@ -225,7 +225,10 @@ def train_session_model(dataset_path: str = "data/processed/session_start_train.
         "validation_window_end": val_end_date.isoformat() if val_end_date is not None else None,
         "data_hash": data_hash,
         "version_hash": version_hash,
-        "rolling_window_days": rolling_window_days
+        "rolling_window_days": rolling_window_days,
+        "model_beats_historical_baseline": evaluation_results.get(
+            "comparison", {}
+        ).get("model_beats_hist"),
     }
     
     # Save model with metadata
@@ -247,7 +250,6 @@ def train_session_model(dataset_path: str = "data/processed/session_start_train.
 
 if __name__ == "__main__":
     train_session_model()
-
 
 
 

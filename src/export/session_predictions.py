@@ -5,6 +5,11 @@ import pickle
 from datetime import datetime, timedelta
 from typing import Dict
 
+try:
+    from utils.listening_time import listening_now, to_listening_time
+except ModuleNotFoundError:
+    from ..utils.listening_time import listening_now, to_listening_time
+
 
 def cyclical_encode(value: float, max_value: float) -> tuple:
     sin_val = np.sin(2 * np.pi * value / max_value)
@@ -15,12 +20,31 @@ def cyclical_encode(value: float, max_value: float) -> tuple:
 def load_model(model_path: str) -> tuple:
     with open(model_path, 'rb') as f:
         model_data = pickle.load(f)
-    return model_data["model"], model_data["feature_cols"]
+    return model_data["model"], model_data["feature_cols"], model_data.get("metadata", {})
+
+
+def build_historical_hour_probabilities(history_df: pd.DataFrame, today) -> Dict:
+    """Smoothed 30-day hourly baseline used when the model does not beat it."""
+    window_start = today - timedelta(days=30)
+    session_starts = history_df.groupby("session_id")["played_at"].min().reset_index()
+    session_starts = session_starts[
+        (session_starts["played_at"].dt.date >= window_start)
+        & (session_starts["played_at"].dt.date < today)
+    ].copy()
+    session_starts["date"] = session_starts["played_at"].dt.date
+    session_starts["hour"] = session_starts["played_at"].dt.hour
+    session_starts = session_starts.drop_duplicates(subset=["date", "hour"])
+    observed_days = max(1, min(30, (today - window_start).days))
+    hour_counts = session_starts["hour"].value_counts()
+    return {
+        str(hour): float((hour_counts.get(hour, 0) + 1) / (observed_days + 2))
+        for hour in range(24)
+    }
 
 
 def build_session_probabilities(session_model_path: str, history_path: str = "data/history.parquet") -> Dict:
     # Load model
-    model, feature_cols = load_model(session_model_path)
+    model, feature_cols, model_metadata = load_model(session_model_path)
     
     # Load history to calculate historical patterns
     history_df = pd.read_parquet(history_path) if os.path.exists(history_path) else pd.DataFrame()
@@ -30,7 +54,7 @@ def build_session_probabilities(session_model_path: str, history_path: str = "da
     session_info_dict = {}
     
     if not history_df.empty and "session_id" in history_df.columns:
-        history_df["played_at"] = pd.to_datetime(history_df["played_at"])
+        history_df["played_at"] = to_listening_time(history_df["played_at"])
         
         # Get session starts
         session_starts_df = history_df.groupby("session_id")["played_at"].min().reset_index()
@@ -63,7 +87,13 @@ def build_session_probabilities(session_model_path: str, history_path: str = "da
         }
     
     # Get today's date
-    today = datetime.now().date()
+    today = listening_now().date()
+
+    if (
+        not history_df.empty
+        and model_metadata.get("model_beats_historical_baseline") is False
+    ):
+        return build_historical_hour_probabilities(history_df, today)
     
     # Build features for each hour today
     probabilities = {}
@@ -178,7 +208,7 @@ def build_actual_session_distribution(history_path: str = "data/history.parquet"
         return {str(hour): 0.0 for hour in range(24)}
     
     # Ensure played_at is datetime
-    df["played_at"] = pd.to_datetime(df["played_at"])
+    df["played_at"] = to_listening_time(df["played_at"])
     
     # Find session starts (first track of each session)
     session_starts = df.groupby("session_id")["played_at"].min().reset_index()
@@ -202,4 +232,3 @@ def build_actual_session_distribution(history_path: str = "data/history.parquet"
         normalized = {hour: 0.0 for hour in distribution.keys()}
     
     return normalized
-

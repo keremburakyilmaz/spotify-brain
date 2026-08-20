@@ -2,13 +2,17 @@ name: Update Pipeline
 
 on:
   schedule:
-    # Runs at :00 and :30 UTC every hour (Stockholm time = :01 and :31 in winter)
+    # Runs at :00 and :30 UTC every hour. Feature extraction converts to the
+    # configured listening timezone below.
     - cron: "0,30 * * * *"
   workflow_dispatch:
 
 concurrency:
-  group: update-pipeline
-  cancel-in-progress: true
+  group: spotify-pipeline
+  cancel-in-progress: false
+
+env:
+  LISTENING_TIMEZONE: Europe/Istanbul
 
 jobs:
   update:
@@ -31,6 +35,12 @@ jobs:
         run: |
           conda activate spotify-brain
           pip install -r requirements.txt
+
+      - name: Run pipeline tests
+        shell: bash -l {0}
+        run: |
+          conda activate spotify-brain
+          python -m unittest discover -s tests -v
 
       - name: Run update pipeline
         shell: bash -l {0}

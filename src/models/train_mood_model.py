@@ -2,11 +2,13 @@ import pandas as pd
 import numpy as np
 import os
 import pickle
+import hashlib
+from datetime import datetime
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, top_k_accuracy_score
 from sklearn.preprocessing import label_binarize
 import xgboost as xgb
-from typing import Dict, Tuple
+from typing import Dict
 
 
 def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.parquet",
@@ -29,7 +31,8 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
     if target_col not in df.columns:
         raise ValueError(f"Target column '{target_col}' not found in dataset")
     
-    exclude_cols = [target_col, "date"] if "date" in df.columns else [target_col]
+    metadata_cols = {target_col, "date", "target_played_at", "session_id"}
+    exclude_cols = [col for col in metadata_cols if col in df.columns]
     feature_cols = [col for col in df.columns if col not in exclude_cols]
     
     X = df[feature_cols].values
@@ -44,67 +47,56 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
         print("Warning: Missing values in features, filling with 0")
         X = np.nan_to_num(X, nan=0.0)
     
-    if use_time_split and "date" in df.columns:
-        df_sorted = df.sort_values("date").reset_index(drop=True)
-        split_idx = int(len(df_sorted) * (1 - test_size))
-        
-        X_train = df_sorted.loc[:split_idx, feature_cols].values
-        y_train = df_sorted.loc[:split_idx, target_col].values
-        X_val = df_sorted.loc[split_idx:, feature_cols].values
-        y_val = df_sorted.loc[split_idx:, target_col].values
-        
-        X_train = np.nan_to_num(X_train, nan=0.0)
-        X_val = np.nan_to_num(X_val, nan=0.0)
+    if use_time_split:
+        required_metadata = {"target_played_at", "session_id"}
+        missing_metadata = required_metadata - set(df.columns)
+        if missing_metadata:
+            raise ValueError(
+                "Leakage-safe mood validation requires dataset columns: "
+                + ", ".join(sorted(missing_metadata))
+            )
+
+        df = df.copy()
+        df["target_played_at"] = pd.to_datetime(df["target_played_at"], utc=True)
+        session_order = (
+            df.groupby("session_id")["target_played_at"]
+            .max()
+            .sort_values()
+            .index.tolist()
+        )
+        if len(session_order) < 2:
+            raise ValueError("At least two sessions are required for temporal validation")
+        n_val_sessions = max(1, int(np.ceil(len(session_order) * test_size)))
+        n_val_sessions = min(n_val_sessions, len(session_order) - 1)
+        val_sessions = set(session_order[-n_val_sessions:])
+        train_df = df[~df["session_id"].isin(val_sessions)].copy()
+        val_df = df[df["session_id"].isin(val_sessions)].copy()
     else:
-        # Check if stratification is possible (each class needs at least 2 samples)
         from collections import Counter
         class_counts = Counter(y)
         min_class_count = min(class_counts.values())
         can_stratify = min_class_count >= 2
-        
-        if can_stratify:
-            X_train, X_val, y_train, y_val = train_test_split(
-                X, y, test_size=test_size, random_state=random_state, stratify=y
-            )
-        else:
-            print(f"Warning: Cannot use stratified split (min class count: {min_class_count}). Using random split instead.")
-            X_train, X_val, y_train, y_val = train_test_split(
-                X, y, test_size=test_size, random_state=random_state
-            )
-    
+        stratify = df[target_col] if can_stratify else None
+        train_df, val_df = train_test_split(
+            df,
+            test_size=test_size,
+            random_state=random_state,
+            stratify=stratify,
+        )
+
+    X_train = np.nan_to_num(train_df[feature_cols].values, nan=0.0)
+    y_train = train_df[target_col].values
+    X_val = np.nan_to_num(val_df[feature_cols].values, nan=0.0)
+    y_val = val_df[target_col].values
+
     train_classes = np.unique(y_train)
     val_classes = np.unique(y_val)
     missing_in_train = set(unique_classes) - set(train_classes)
-    
-    if len(missing_in_train) > 0:
-        print(f"Ensuring all {n_classes} classes are in training set (moving samples from validation)...")
-        print(f"  Training classes before: {sorted(train_classes)}")
-        print(f"  Missing classes: {sorted(missing_in_train)}")
-        # Convert to DataFrame for easier manipulation
-        train_df = pd.DataFrame(X_train, columns=feature_cols)
-        train_df['target'] = y_train
-        val_df = pd.DataFrame(X_val, columns=feature_cols)
-        val_df['target'] = y_val
-        
-        # For each missing class, move one sample from validation to training
-        for missing_class in missing_in_train:
-            # Find samples of this class in validation
-            class_samples = val_df[val_df['target'] == missing_class]
-            if len(class_samples) > 0:
-                # Move first sample to training
-                sample_to_move = class_samples.iloc[0:1]
-                train_df = pd.concat([train_df, sample_to_move], ignore_index=True)
-                val_df = val_df.drop(sample_to_move.index)
-                print(f"  Moved 1 sample of class {missing_class} from validation to training")
-        
-        # Convert back to numpy arrays
-        X_train = train_df[feature_cols].values
-        y_train = train_df['target'].values
-        X_val = val_df[feature_cols].values
-        y_val = val_df['target'].values
-        
-        print(f"  Training classes after: {sorted(np.unique(y_train))}")
-        print(f"After adjustment - Train samples: {len(X_train)}, Validation samples: {len(X_val)}")
+    if missing_in_train:
+        raise ValueError(
+            "Temporal training window is missing mood classes: "
+            + ", ".join(str(value) for value in sorted(missing_in_train))
+        )
     
     print(f"Train samples: {len(X_train)}, Validation samples: {len(X_val)}")
     print(f"Train classes: {sorted(np.unique(y_train))}, Val classes: {sorted(np.unique(y_val))}")
@@ -112,13 +104,18 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
     print("Training XGBoost classifier")
     
     model = xgb.XGBClassifier(
-        n_estimators=100,
-        max_depth=6,
-        learning_rate=0.1,
+        n_estimators=300,
+        max_depth=3,
+        learning_rate=0.05,
+        min_child_weight=3,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        reg_lambda=2.0,
         random_state=random_state,
         eval_metric='mlogloss',
         objective='multi:softprob',  # Explicitly set multi-class objective
-        num_class=n_classes  # Explicitly set number of classes
+        num_class=n_classes,  # Explicitly set number of classes
+        early_stopping_rounds=20,
     )
     
     model.fit(
@@ -139,6 +136,32 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
     
     train_f1 = f1_score(y_train, y_train_pred, average='macro')
     val_f1 = f1_score(y_val, y_val_pred, average='macro')
+
+    majority_class = int(pd.Series(y_train).mode().iloc[0])
+    majority_val_accuracy = accuracy_score(
+        y_val, np.full(len(y_val), majority_class)
+    )
+    sequence_columns = sorted(
+        (col for col in feature_cols if col.startswith("mood_cluster_")),
+        key=lambda col: int(col.rsplit("_", 1)[1]),
+    )
+    persistence_val_accuracy = None
+    if sequence_columns:
+        persistence_val_accuracy = accuracy_score(
+            y_val, val_df[sequence_columns[-1]].values
+        )
+    strongest_baseline = max(
+        value
+        for value in [majority_val_accuracy, persistence_val_accuracy]
+        if value is not None
+    )
+    top_k = min(3, max(1, n_classes - 1))
+    val_top_k_accuracy = top_k_accuracy_score(
+        y_val,
+        y_val_proba,
+        k=top_k,
+        labels=model.classes_,
+    )
     
     # ROC-AUC for multi-class (one-vs-rest)
     # Use model's classes_ to ensure consistent class ordering
@@ -180,6 +203,15 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
         "val_f1_macro": float(val_f1),
         "train_roc_auc": float(train_roc_auc),
         "val_roc_auc": float(val_roc_auc),
+        "val_top_k_accuracy": float(val_top_k_accuracy),
+        "val_top_k_k": int(top_k),
+        "majority_val_accuracy": float(majority_val_accuracy),
+        "persistence_val_accuracy": (
+            float(persistence_val_accuracy)
+            if persistence_val_accuracy is not None
+            else None
+        ),
+        "model_beats_baseline": bool(val_accuracy > strongest_baseline),
         "n_features": len(feature_cols),
         "n_train": len(X_train),
         "n_val": len(X_val)
@@ -188,12 +220,47 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
     print(f"Train Accuracy: {train_accuracy:.4f}, Val Accuracy: {val_accuracy:.4f}")
     print(f"Train F1 (macro): {train_f1:.4f}, Val F1 (macro): {val_f1:.4f}")
     print(f"Train ROC-AUC: {train_roc_auc:.4f}, Val ROC-AUC: {val_roc_auc:.4f}")
+    print(
+        f"Val Top-{top_k}: {val_top_k_accuracy:.4f}, "
+        f"Strongest baseline accuracy: {strongest_baseline:.4f}, "
+        f"Model beats baseline: {val_accuracy > strongest_baseline}"
+    )
     
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    training_timestamp = datetime.utcnow()
+    data_hash_input = (
+        f"{train_df['target_played_at'].min() if 'target_played_at' in train_df else None}_"
+        f"{train_df['target_played_at'].max() if 'target_played_at' in train_df else None}_"
+        f"{len(train_df)}"
+    )
+    data_hash = hashlib.md5(data_hash_input.encode()).hexdigest()[:8]
+    version_hash = hashlib.md5(
+        f"{training_timestamp.isoformat()}_{data_hash}".encode()
+    ).hexdigest()[:8]
+    metadata = {
+        "training_date": training_timestamp.isoformat(),
+        "data_hash": data_hash,
+        "version_hash": version_hash,
+        "model_beats_baseline": metrics["model_beats_baseline"],
+        "fallback_strategy": (
+            "persistence"
+            if persistence_val_accuracy is not None
+            and persistence_val_accuracy > majority_val_accuracy
+            else "majority"
+        ),
+        "fallback_cluster": majority_class,
+        "fallback_validation_accuracy": float(strongest_baseline),
+        "class_priors": {
+            str(int(cluster)): float((y_train == cluster).mean())
+            for cluster in model.classes_
+        },
+    }
+
     with open(model_path, 'wb') as f:
         pickle.dump({
             "model": model,
-            "feature_cols": feature_cols
+            "feature_cols": feature_cols,
+            "metadata": metadata,
         }, f)
     
     print(f"Saved model to {model_path}")
@@ -202,9 +269,4 @@ def train_mood_model(dataset_path: str = "data/processed/mood_nexttrack_train.pa
 
 if __name__ == "__main__":
     train_mood_model()
-
-
-
-
-
 

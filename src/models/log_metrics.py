@@ -58,7 +58,12 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
             "train_f1_macro": mood_model_metrics.get("train_f1_macro"),
             "val_f1_macro": mood_model_metrics.get("val_f1_macro"),
             "train_roc_auc": mood_model_metrics.get("train_roc_auc"),
-            "val_roc_auc": mood_model_metrics.get("val_roc_auc")
+            "val_roc_auc": mood_model_metrics.get("val_roc_auc"),
+            "val_top_k_accuracy": mood_model_metrics.get("val_top_k_accuracy"),
+            "val_top_k_k": mood_model_metrics.get("val_top_k_k"),
+            "majority_val_accuracy": mood_model_metrics.get("majority_val_accuracy"),
+            "persistence_val_accuracy": mood_model_metrics.get("persistence_val_accuracy"),
+            "model_beats_baseline": mood_model_metrics.get("model_beats_baseline"),
         }
     elif preserved_mood_metrics:
         # Use preserved metrics from history (already formatted)
@@ -126,5 +131,4 @@ def log_metrics(history_path: str = "metrics/metrics_history.json",
     sanitize_json_file(history_path)
     
     print(f"Logged metrics to {history_path}")
-
 

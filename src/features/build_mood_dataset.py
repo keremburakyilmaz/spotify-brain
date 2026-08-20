@@ -1,12 +1,12 @@
 import pandas as pd
-import numpy as np
 import os
 
-
-def cyclical_encode(value: float, max_value: float) -> tuple:
-    sin_val = np.sin(2 * np.pi * value / max_value)
-    cos_val = np.cos(2 * np.pi * value / max_value)
-    return sin_val, cos_val
+try:
+    from features.mood_prediction_features import AUDIO_FEATURES, build_mood_features
+    from utils.listening_time import to_listening_time
+except ModuleNotFoundError:  # Package imports used by tests and library callers.
+    from .mood_prediction_features import AUDIO_FEATURES, build_mood_features
+    from ..utils.listening_time import to_listening_time
 
 
 def build_mood_dataset(history_path: str = "data/history.parquet",
@@ -29,12 +29,12 @@ def build_mood_dataset(history_path: str = "data/history.parquet",
     
     print(f"Building mood dataset from {len(df)} tracks")
     
+    # Spotify timestamps are UTC. Behavioral hour/day features must use the
+    # listener's timezone consistently in training and inference.
+    df["played_at"] = to_listening_time(df["played_at"])
+
     # Sort by session and time
     df = df.sort_values(["session_id", "played_at"]).reset_index(drop=True)
-    
-    # Audio feature columns
-    audio_features = ["valence", "energy", "danceability", "acousticness", 
-                     "instrumentalness", "tempo_norm"]
     
     # Build dataset
     samples = []
@@ -50,45 +50,18 @@ def build_mood_dataset(history_path: str = "data/history.parquet",
             next_track = session_df.iloc[i + window_size]
             
             # Skip if any track in window is missing features
-            if window_df[audio_features].isna().any().any():
+            if window_df[AUDIO_FEATURES].isna().any().any():
                 continue
-            
-            # Extract features
-            features = {}
-            
-            # Sequence features: mood_cluster_id of last N tracks
-            for j, track_idx in enumerate(window_df.index):
-                features[f"mood_cluster_{j}"] = int(window_df.loc[track_idx, "mood_cluster_id"])
-            
-            # Aggregated audio features from last N tracks: mean and std
-            for feat in audio_features:
-                values = window_df[feat].values
-                features[f"{feat}_mean"] = float(np.mean(values))
-                features[f"{feat}_std"] = float(np.std(values))
-            
-            # Time features
-            last_track_time = pd.to_datetime(window_df.iloc[-1]["played_at"])
-            hour_sin, hour_cos = cyclical_encode(last_track_time.hour, 24)
-            day_sin, day_cos = cyclical_encode(last_track_time.dayofweek, 7)
-            
-            features["hour_sin"] = hour_sin
-            features["hour_cos"] = hour_cos
-            features["day_sin"] = day_sin
-            features["day_cos"] = day_cos
-            features["is_weekend"] = 1 if last_track_time.weekday() >= 5 else 0
-            
-            # Session context
-            features["session_position"] = i + window_size
-            features["session_length"] = len(session_df)
-            
-            # Time since session start (in minutes)
-            session_start = pd.to_datetime(session_df.iloc[0]["played_at"])
-            time_diff = (last_track_time - session_start).total_seconds() / 60
-            features["time_since_session_start"] = float(time_diff)
-            
-            # Current track features (most recent track in window)
-            for feat in audio_features:
-                features[f"current_{feat}"] = float(window_df.iloc[-1][feat])
+
+            features = build_mood_features(
+                window_df,
+                session_position=i + window_size,
+                session_start_time=session_df.iloc[0]["played_at"],
+            )
+
+            # Metadata used only for leakage-safe temporal/grouped validation.
+            features["session_id"] = int(session_id)
+            features["target_played_at"] = next_track["played_at"]
             
             # Target: mood_cluster_id of next track
             features["target_mood_cluster"] = int(next_track["mood_cluster_id"])
@@ -112,8 +85,6 @@ def build_mood_dataset(history_path: str = "data/history.parquet",
 
 if __name__ == "__main__":
     build_mood_dataset()
-
-
 
 
 

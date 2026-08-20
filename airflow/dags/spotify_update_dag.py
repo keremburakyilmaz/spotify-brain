@@ -14,17 +14,12 @@ HISTORY_PATH = "data/history.parquet"
 
 def _ingest(**_):
     enter_project()
-    from ingestion.spotify_ingest import ingest
-    from features.build_mood_clusters_incremental import get_latest_ingestion_file
+    from ingestion.spotify_ingest import ingest_with_metadata
 
-    df = ingest()
-    if df.empty:
+    result = ingest_with_metadata()
+    if not result.has_new_tracks or not result.ingestion_file:
         raise AirflowSkipException("No new tracks to process")
-
-    path = get_latest_ingestion_file()
-    if not path:
-        raise AirflowSkipException("No ingestion file produced")
-    return path
+    return result.ingestion_file
 
 
 def _assign_clusters(**context):
@@ -44,7 +39,7 @@ def _predict_mood(**context):
     try:
         predict_mood_for_tracks(path)
     except Exception as e:
-        # Matches the tolerance in run_update.py - mood predict is best-effort.
+        # Online predictions are best-effort and stored separately from labels.
         print(f"Mood prediction skipped: {e}")
     return path
 

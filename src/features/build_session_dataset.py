@@ -4,6 +4,11 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict
 
+try:
+    from utils.listening_time import to_listening_time
+except ModuleNotFoundError:
+    from ..utils.listening_time import to_listening_time
+
 
 def cyclical_encode(value: float, max_value: float) -> tuple:
     sin_val = np.sin(2 * np.pi * value / max_value)
@@ -25,7 +30,7 @@ def build_session_dataset(history_path: str = "data/history.parquet",
     print(f"Building session dataset from {len(df)} tracks")
     
     # Ensure played_at is datetime
-    df["played_at"] = pd.to_datetime(df["played_at"])
+    df["played_at"] = to_listening_time(df["played_at"])
     
     # Get date range
     min_date = df["played_at"].min().date()
@@ -173,7 +178,6 @@ def build_session_dataset(history_path: str = "data/history.parquet",
 
 if __name__ == "__main__":
     build_session_dataset()
-
 
 
 

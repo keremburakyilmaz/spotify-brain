@@ -56,13 +56,13 @@ def build_mood_trajectory(history_path: str) -> List[Dict]:
     df["played_at"] = pd.to_datetime(df["played_at"])
     # Ensure yesterday is timezone-aware (UTC) to match played_at
     yesterday = datetime.now(timezone.utc) - timedelta(days=1)
-    recent_df = df[df["played_at"] >= yesterday]
+    recent_df = df[df["played_at"] >= yesterday].copy()
     
     if len(recent_df) == 0:
         return None
     
     # Aggregate into 15-minute bins
-    recent_df["time_bin"] = recent_df["played_at"].dt.floor("15T")
+    recent_df["time_bin"] = recent_df["played_at"].dt.floor("15min")
     binned = recent_df.groupby("time_bin").agg({
         "valence": "mean",
         "energy": "mean"
@@ -78,4 +78,3 @@ def build_mood_trajectory(history_path: str) -> List[Dict]:
     ]
     
     return mood_trajectory
-
