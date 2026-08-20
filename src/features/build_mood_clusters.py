@@ -4,6 +4,7 @@ import json
 import os
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+from scipy.optimize import linear_sum_assignment
 from typing import Dict, List, Tuple
 import sys
 
@@ -96,6 +97,47 @@ def generate_cluster_label(centroid: np.ndarray, feature_names: List[str]) -> st
     return label
 
 
+def load_previous_centroids(output_path: str) -> Tuple[np.ndarray, int]:
+    if not os.path.exists(output_path):
+        return np.empty((0, 0)), 0
+    with open(output_path, "r") as existing_file:
+        existing = json.load(existing_file)
+    ordered = sorted(existing.get("clusters", []), key=lambda cluster: cluster["cluster_id"])
+    feature_names = [
+        "valence", "energy", "danceability", "acousticness",
+        "instrumentalness", "tempo_norm",
+    ]
+    centroids = np.asarray(
+        [
+            [cluster["centroid"][feature] for feature in feature_names]
+            for cluster in ordered
+        ],
+        dtype=float,
+    )
+    return centroids, int(existing.get("optimal_k", len(ordered)))
+
+
+def align_cluster_identities(new_centroids: np.ndarray,
+                             previous_centroids: np.ndarray) -> Tuple[np.ndarray, Dict[int, int], float]:
+    """Align new K-Means IDs with the closest previous semantic centroids."""
+    if new_centroids.shape != previous_centroids.shape:
+        identity = {index: index for index in range(len(new_centroids))}
+        return new_centroids, identity, float("nan")
+    distances = np.linalg.norm(
+        new_centroids[:, np.newaxis, :] - previous_centroids[np.newaxis, :, :], axis=2
+    )
+    new_indices, previous_indices = linear_sum_assignment(distances)
+    mapping = {
+        int(new_index): int(previous_index)
+        for new_index, previous_index in zip(new_indices, previous_indices)
+    }
+    aligned = np.empty_like(new_centroids)
+    for new_index, previous_index in mapping.items():
+        aligned[previous_index] = new_centroids[new_index]
+    mean_drift = float(np.mean([distances[new, old] for new, old in mapping.items()]))
+    return aligned, mapping, mean_drift
+
+
 def build_mood_clusters(history_path: str = "data/history.parquet",
                        output_path: str = "models/mood_clusters.json",
                        k_range: Tuple[int, int] = (3, 15)) -> pd.DataFrame:
@@ -118,15 +160,33 @@ def build_mood_clusters(history_path: str = "data/history.parquet",
     
     print(f"Using {len(X)} tracks with complete features")
     
-    # Find optimal K
-    print(f"Finding optimal K in range {k_range}")
-    optimal_k = find_optimal_k(X, k_range)
+    previous_centroids, previous_k = load_previous_centroids(output_path)
+    configured_k = os.environ.get("MOOD_CLUSTER_COUNT")
+    if configured_k:
+        optimal_k = int(configured_k)
+        print(f"Using configured K: {optimal_k}")
+    elif previous_k >= 2:
+        optimal_k = previous_k
+        print(f"Keeping stable K from previous model: {optimal_k}")
+    else:
+        print(f"Finding optimal K in range {k_range}")
+        optimal_k = find_optimal_k(X, k_range)
     print(f"Optimal K: {optimal_k}")
     
     # Fit KMeans
     print("Fitting KMeans")
     kmeans = KMeans(n_clusters=optimal_k, random_state=42, n_init=10)
     labels = kmeans.fit_predict(X)
+    centroids, identity_mapping, centroid_drift = align_cluster_identities(
+        kmeans.cluster_centers_, previous_centroids
+    )
+    if previous_centroids.shape == kmeans.cluster_centers_.shape:
+        labels = np.asarray([identity_mapping[int(label)] for label in labels])
+        alignment_status = "aligned_to_previous"
+        print(f"Aligned cluster identities; mean centroid drift: {centroid_drift:.4f}")
+    else:
+        centroids = kmeans.cluster_centers_
+        alignment_status = "initialized" if previous_k == 0 else "reset_after_k_change"
     
     # Assign cluster IDs to tracks
     df.loc[valid_indices, "mood_cluster_id"] = labels
@@ -137,7 +197,7 @@ def build_mood_clusters(history_path: str = "data/history.parquet",
     
     clusters_metadata = []
     for cluster_id in range(optimal_k):
-        centroid = kmeans.cluster_centers_[cluster_id]
+        centroid = centroids[cluster_id]
         label = generate_cluster_label(centroid, features)
         
         cluster_data = {
@@ -157,6 +217,8 @@ def build_mood_clusters(history_path: str = "data/history.parquet",
     # Save metadata
     clusters_data = {
         "optimal_k": optimal_k,
+        "identity_alignment": alignment_status,
+        "mean_centroid_drift": centroid_drift,
         "clusters": clusters_metadata
     }
     
@@ -180,8 +242,6 @@ def build_mood_clusters(history_path: str = "data/history.parquet",
 
 if __name__ == "__main__":
     build_mood_clusters()
-
-
 
 
 

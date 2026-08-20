@@ -176,17 +176,19 @@ This allows new tracks to be assigned to existing clusters without rebuilding al
 The mood prediction dataset (`src/features/build_mood_dataset.py`) predicts the mood cluster of the next track in a session:
 
 **Window-Based Approach**:
-- Uses a sliding window of the last N tracks (default: 3) to predict the next track's mood
+- Uses a sliding window of the last N tracks (default: 3) to predict several plausible next moods. A 3/5/8-track chronological grid favored three tracks for coverage and holdout probability quality.
 - Creates one training sample per position in each session
 
 **Features Extracted**:
 
 1. **Sequence Features**:
-   - `mood_cluster_0`, `mood_cluster_1`, `mood_cluster_2`: Mood cluster IDs of the last 3 tracks
+   - Ordered mood IDs for the last three tracks
+   - Transition count, repeat ratio, dominant-mood share, unique moods, and whether the latest mood changed
 
 2. **Aggregated Audio Features** (from last N tracks):
    - `{feature}_mean`: Mean of each audio feature over the window
    - `{feature}_std`: Standard deviation of each audio feature over the window
+   - `{feature}_trend` and `{feature}_last_delta`: Direction and most recent change
    - Features: `valence`, `energy`, `danceability`, `acousticness`, `instrumentalness`, `tempo_norm`
 
 3. **Time Features** (cyclical encoding):
@@ -197,11 +199,21 @@ The mood prediction dataset (`src/features/build_mood_dataset.py`) predicts the 
 4. **Session Context**:
    - `session_position`: Position of the current track in the session
    - `time_since_session_start`: Minutes since the session started
+   - Latest, mean, and standard deviation of inter-track gaps
+   - Artist diversity and repeated-track ratio
 
 5. **Current Track Features**:
    - `current_{feature}`: Audio features of the most recent track in the window
 
-**Target**: `target_mood_cluster` - The mood cluster ID of the next track
+6. **Optional Behavioral Features**:
+   - Skip rate, completion rate, shuffle rate, manual-selection rate, and playback-source continuity
+   - Every optional signal has an availability flag, so missing historical data is never interpreted as a real zero
+
+**Targets and diagnostics**:
+- `target_mood_cluster`: mood cluster of the next track
+- `target_mood_switch`: whether listening changes direction
+- `target_energy_direction`: whether energy rises, falls, or stays level
+- `target_artist_repeat`: whether the next artist appeared in the recent window
 
 The dataset also stores `session_id` and `target_played_at` as validation
 metadata. They are excluded from model features and keep complete future
@@ -253,15 +265,17 @@ Both models use XGBoost classifiers with similar training procedures:
 4. **Model Configuration**:
    - Algorithm: XGBoost Classifier
    - Objective: `multi:softprob` (multi-class classification)
-   - Up to 300 estimators with early stopping
+   - Up to 400 estimators with early stopping on an inner chronological calibration split
    - Max depth: 3
-   - Learning rate: 0.05
-   - Row/column subsampling and L2 regularization
+   - Learning rate: 0.04
+   - Row/column subsampling plus L1/L2 regularization
    - Random state: 42
-5. **Training**: Fit model with early stopping on validation set
-6. **Evaluation**: Calculate accuracy, macro-F1, ROC-AUC, top-k accuracy, majority baseline, and persistence baseline
-7. **Quality Gate**: If the model does not beat the strongest simple baseline, export that baseline instead of presenting the model as superior
-8. **Saving**: Save model, feature columns, fallback policy, and version metadata to `models/mood_classifier.pkl`
+5. **Recency Weighting**: Exponentially down-weight older samples with a configurable 90-day half-life
+6. **Calibration**: Fit temperature scaling on the inner chronological split; the outer validation sessions remain untouched
+7. **Candidate Evaluation**: Compare XGBoost with recency-weighted majority, smoothed persistence, and contextual transition/backoff distributions
+8. **Quality Gate**: Select the probability-aware winner using log loss plus a top-1 penalty; require a material margin before activating XGBoost
+9. **Abstention**: Learn a confidence/entropy policy and label low-predictability outputs instead of forcing certainty
+10. **Saving**: Save model, calibration, contextual counts, selection policy, abstention policy, and version metadata
 
 #### Session Model Training (`src/models/train_session_model.py`)
 
@@ -293,13 +307,27 @@ Both models use XGBoost classifiers with similar training procedures:
 - **F1-Score (Macro)**: Average F1-score across all classes
 - **ROC-AUC**: One-vs-rest ROC-AUC with macro averaging
 - **Top-k Accuracy**: Whether the observed next direction was among the most likely directions
+- **Log Loss**: Quality of the complete probability distribution
+- **Brier Score**: Squared probability error across all moods
+- **Mean Reciprocal Rank**: How highly the observed direction was ranked
+- **Expected Calibration Error**: Gap between stated likelihood and observed correctness
+- **Switch Accuracy/Brier/ROC-AUC**: Whether the system recognizes an upcoming direction change
 - **Majority Baseline**: Always predict the most common training mood
 - **Persistence Baseline**: Predict that the latest mood continues
+- **Contextual Transition Baseline**: Smoothed sequence/time/session-position transitions with backoff from exact recent context to global history
 
 **Evaluation Process**:
-1. Predict on training and validation sets
-2. Calculate metrics for both sets
-3. Log metrics to `metrics/metrics_history.json`
+1. Keep the newest complete sessions as an untouched chronological holdout
+2. Compare calibrated distributions for all candidates on the same rows
+3. Choose the safest candidate and derive an explicit abstention policy
+4. Export ranked directions, predictability, entropy, switch likelihood, holdout reliability, and context level
+5. Log candidate and selected-strategy metrics to `metrics/metrics_history.json`
+
+Re-run the window/decay comparison without modifying production artifacts:
+
+```bash
+python scripts/evaluate_mood_configurations.py --windows 3,5,8 --half-lives 30,90,180
+```
 
 #### Session Model Evaluation (`src/models/evaluate_session_model.py`)
 

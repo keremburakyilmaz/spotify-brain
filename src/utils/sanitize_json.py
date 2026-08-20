@@ -6,13 +6,16 @@ from typing import Any, Dict, List, Union
 
 def sanitize_value(value: Any) -> Any:
     if value is None:
-        return "NaN"
+        return None
     
     if isinstance(value, float):
         if np.isnan(value) or np.isinf(value):
-            return "NaN"
+            return None
         return value
     
+    if isinstance(value, str) and value in {"NaN", "Infinity", "-Infinity"}:
+        return None
+
     if isinstance(value, (int, str, bool)):
         return value
     
@@ -27,7 +30,7 @@ def sanitize_value(value: Any) -> Any:
         if hasattr(value, '__float__'):
             float_val = float(value)
             if np.isnan(float_val) or np.isinf(float_val):
-                return "NaN"
+                return None
     except (ValueError, TypeError):
         pass
     
@@ -57,4 +60,3 @@ def sanitize_json_file(file_path: str) -> None:
 
 def sanitize_dict(data: Dict) -> Dict:
     return sanitize_value(data)
-

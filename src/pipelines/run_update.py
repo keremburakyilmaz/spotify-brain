@@ -12,6 +12,8 @@ from features.build_mood_clusters_incremental import (
 )
 from features.mood_prediction_features import build_feature_vector, build_mood_features
 from export.build_dashboard_json import build_dashboard_json
+from export.mood_predictions import select_probability_vector
+from models.prediction_evaluation import describe_predictability
 from models.log_metrics import log_metrics
 from utils.listening_time import to_listening_time
 
@@ -38,6 +40,11 @@ def predict_mood_for_tracks(ingestion_file_path: str,
         model_data = pickle.load(f)
         mood_model = model_data["model"]
         feature_cols = model_data["feature_cols"]
+        model_metadata = model_data.get("metadata", {})
+        if model_data.get("switch_model") is not None:
+            model_metadata = dict(model_metadata)
+            model_metadata["_switch_model"] = model_data["switch_model"]
+    effective_window_size = int(model_metadata.get("window_size", window_size))
     
     # Load history to get context for predictions
     history_df = pd.read_parquet(history_path) if os.path.exists(history_path) else pd.DataFrame()
@@ -52,6 +59,9 @@ def predict_mood_for_tracks(ingestion_file_path: str,
     # Predict mood for each track
     predicted_moods = []
     predicted_confidences = []
+    prediction_sources = []
+    prediction_entropies = []
+    prediction_abstentions = []
     
     for idx, track in feature_df.iterrows():
         session_id = track["session_id"]
@@ -85,17 +95,23 @@ def predict_mood_for_tracks(ingestion_file_path: str,
             all_session_tracks = session_tracks_ingestion.copy()
         
         # Get last window_size tracks (or fewer if not enough)
-        window_df = all_session_tracks.tail(window_size).copy()
+        window_df = all_session_tracks.tail(effective_window_size).copy()
         
-        if len(window_df) < window_size:
+        if len(window_df) < effective_window_size:
             predicted_moods.append(None)
             predicted_confidences.append(None)
+            prediction_sources.append(None)
+            prediction_entropies.append(None)
+            prediction_abstentions.append(None)
             continue
         
         # Check if all tracks in window have mood_cluster_id
         if window_df["mood_cluster_id"].isna().any():
             predicted_moods.append(None)
             predicted_confidences.append(None)
+            prediction_sources.append(None)
+            prediction_entropies.append(None)
+            prediction_abstentions.append(None)
             continue
 
         features = build_mood_features(
@@ -105,18 +121,30 @@ def predict_mood_for_tracks(ingestion_file_path: str,
         )
         X = build_feature_vector(features, feature_cols)
         
-        # Predict
-        pred_cluster = int(mood_model.predict(X)[0])
-        predicted_moods.append(pred_cluster)
-        class_index = list(mood_model.classes_).index(pred_cluster)
-        predicted_confidences.append(
-            float(mood_model.predict_proba(X)[0][class_index])
+        classes, probabilities, selected_strategy, _ = select_probability_vector(
+            mood_model, model_metadata, features, X
         )
+        pred_cluster = int(classes[int(probabilities.argmax())])
+        predicted_moods.append(pred_cluster)
+        predicted_confidences.append(float(probabilities.max()))
+        prediction_sources.append(
+            selected_strategy
+            if selected_strategy in {"model", "two_stage_model"}
+            else f"{selected_strategy}_baseline"
+        )
+        predictability = describe_predictability(
+            probabilities, model_metadata.get("abstention_policy", {})
+        )
+        prediction_entropies.append(predictability["normalized_entropy"])
+        prediction_abstentions.append(predictability["abstained"])
 
     df["predicted_mood_cluster_id"] = pd.array(predicted_moods, dtype="Int64")
     df["prediction_confidence"] = pd.array(
         predicted_confidences, dtype="Float64"
     )
+    df["prediction_source"] = prediction_sources
+    df["prediction_entropy"] = pd.array(prediction_entropies, dtype="Float64")
+    df["prediction_abstained"] = pd.array(prediction_abstentions, dtype="boolean")
     
     # Save updated ingestion file
     df.to_parquet(ingestion_file_path, index=False)

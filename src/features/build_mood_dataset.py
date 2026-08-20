@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import os
 
@@ -65,6 +66,16 @@ def build_mood_dataset(history_path: str = "data/history.parquet",
             
             # Target: mood_cluster_id of next track
             features["target_mood_cluster"] = int(next_track["mood_cluster_id"])
+            features["target_mood_switch"] = int(
+                int(next_track["mood_cluster_id"]) != int(window_df.iloc[-1]["mood_cluster_id"])
+            )
+            features["target_energy_direction"] = int(
+                np.sign(float(next_track["energy"]) - float(window_df.iloc[-1]["energy"]))
+            )
+            features["target_artist_repeat"] = int(
+                "artist_name" in next_track.index
+                and next_track["artist_name"] in set(window_df["artist_name"])
+            )
             
             samples.append(features)
     
@@ -85,7 +96,4 @@ def build_mood_dataset(history_path: str = "data/history.parquet",
 
 if __name__ == "__main__":
     build_mood_dataset()
-
-
-
 
