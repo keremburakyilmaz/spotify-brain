@@ -196,13 +196,17 @@ The mood prediction dataset (`src/features/build_mood_dataset.py`) predicts the 
 
 4. **Session Context**:
    - `session_position`: Position of the current track in the session
-   - `session_length`: Total number of tracks in the session
    - `time_since_session_start`: Minutes since the session started
 
 5. **Current Track Features**:
    - `current_{feature}`: Audio features of the most recent track in the window
 
 **Target**: `target_mood_cluster` - The mood cluster ID of the next track
+
+The dataset also stores `session_id` and `target_played_at` as validation
+metadata. They are excluded from model features and keep complete future
+sessions out of training. Behavioral time features use `LISTENING_TIMEZONE`,
+which production sets to `Europe/Istanbul`.
 
 ### Session Dataset (`session_start_train.parquet`)
 
@@ -242,20 +246,22 @@ Both models use XGBoost classifiers with similar training procedures:
 
 1. **Data Loading**: Load `mood_nexttrack_train.parquet`
 2. **Data Splitting**:
-   - **Time-based split** (default): Split by date to avoid temporal leakage
-   - **Random split** (fallback): Stratified random split if time-based not possible
+   - **Time-based session split** (default): newest complete sessions are validation data
+   - Random splitting is available only when explicitly requested for experiments
    - Train/validation split: 80/20
-3. **Class Balancing**: Ensures all classes are present in training set (moves samples from validation if needed)
+3. **Leakage Guard**: Training fails if the temporal training window lacks a class; validation samples are never moved into training
 4. **Model Configuration**:
    - Algorithm: XGBoost Classifier
    - Objective: `multi:softprob` (multi-class classification)
-   - Number of estimators: 100
-   - Max depth: 6
-   - Learning rate: 0.1
+   - Up to 300 estimators with early stopping
+   - Max depth: 3
+   - Learning rate: 0.05
+   - Row/column subsampling and L2 regularization
    - Random state: 42
 5. **Training**: Fit model with early stopping on validation set
-6. **Evaluation**: Calculate accuracy, F1-score (macro), and ROC-AUC (one-vs-rest)
-7. **Saving**: Save model and feature column names to `models/mood_classifier.pkl`
+6. **Evaluation**: Calculate accuracy, macro-F1, ROC-AUC, top-k accuracy, majority baseline, and persistence baseline
+7. **Quality Gate**: If the model does not beat the strongest simple baseline, export that baseline instead of presenting the model as superior
+8. **Saving**: Save model, feature columns, fallback policy, and version metadata to `models/mood_classifier.pkl`
 
 #### Session Model Training (`src/models/train_session_model.py`)
 
@@ -286,6 +292,9 @@ Both models use XGBoost classifiers with similar training procedures:
 - **Accuracy**: Percentage of correct predictions
 - **F1-Score (Macro)**: Average F1-score across all classes
 - **ROC-AUC**: One-vs-rest ROC-AUC with macro averaging
+- **Top-k Accuracy**: Whether the observed next direction was among the most likely directions
+- **Majority Baseline**: Always predict the most common training mood
+- **Persistence Baseline**: Predict that the latest mood continues
 
 **Evaluation Process**:
 1. Predict on training and validation sets
@@ -354,7 +363,7 @@ The system monitors for data drift by comparing recent data (last 7 days) to pri
 **Steps**:
 1. **Ingest New Tracks**: Fetch recently played tracks from Spotify
 2. **Assign Clusters**: Assign new tracks to existing mood clusters using nearest centroid
-3. **Predict Moods**: Use mood model to predict cluster for tracks with sufficient context
+3. **Record Online Predictions**: Store predictions and confidence separately from each track's observed audio cluster
 4. **Update History**: Merge new tracks into `history.parquet` (removing nulls)
 5. **Build Dashboard**: Generate dashboard JSON for visualization
 6. **Detect Drift**: Monitor for data drift and log metrics
@@ -364,7 +373,8 @@ The system monitors for data drift by comparing recent data (last 7 days) to pri
 **Key Characteristics**:
 - Incremental: Only processes new tracks
 - Fast: No model retraining
-- Non-destructive: Preserves ingestion files for audit
+- Non-destructive: Preserves observed labels and ingestion files for audit
+- Idempotent: Exits without reusing an old ingestion file when no new tracks exist
 
 ### Full Retrain Pipeline (`.github/workflows/full-retrain.yml`)
 

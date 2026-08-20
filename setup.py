@@ -3,14 +3,13 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from ingestion.spotify_ingest import ingest, update_history_from_ingestion
+from ingestion.spotify_ingest import ingest_with_metadata, update_history_from_ingestion
 from features.build_mood_clusters import build_mood_clusters
 from features.build_mood_clusters_incremental import assign_tracks_to_existing_clusters
 from features.build_mood_dataset import build_mood_dataset
 from features.build_session_dataset import build_session_dataset
 from models.train_mood_model import train_mood_model
 from models.train_session_model import train_session_model
-from features.build_mood_clusters_incremental import get_latest_ingestion_file
 
 
 def setup():
@@ -21,7 +20,8 @@ def setup():
     try:
         # Step 1: Ingest data from Spotify
         print("\n[1/6] Ingesting initial data from Spotify")
-        df = ingest()
+        ingestion = ingest_with_metadata()
+        df = ingestion.tracks
         
         if df.empty:
             print("Error: No data was ingested. Please check your Spotify API credentials.")
@@ -30,7 +30,7 @@ def setup():
         print(f"Ingested {len(df)} tracks")
         
         # Get the ingestion file path and update history
-        latest_ingestion_file = get_latest_ingestion_file()
+        latest_ingestion_file = ingestion.ingestion_file
         if not latest_ingestion_file:
             print("Error: Could not find ingestion file. Setup cannot continue.")
             return
@@ -83,7 +83,5 @@ def setup():
 
 if __name__ == "__main__":
     setup()
-
-
 
 

@@ -1,5 +1,6 @@
 import os
 import time
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Iterable
 
@@ -8,6 +9,27 @@ import requests
 from dotenv import load_dotenv
 
 load_dotenv()
+
+REQUIRED_HISTORY_COLUMNS = [
+    "track_id",
+    "played_at",
+    "session_id",
+    "mood_cluster_id",
+    "valence",
+    "energy",
+    "danceability",
+    "acousticness",
+    "instrumentalness",
+    "tempo",
+    "tempo_norm",
+]
+
+
+@dataclass(frozen=True)
+class IngestionResult:
+    tracks: pd.DataFrame
+    ingestion_file: Optional[str]
+    has_new_tracks: bool
 
 
 class SpotifyReauthorizationRequired(RuntimeError):
@@ -297,7 +319,9 @@ def assign_session_ids(df: pd.DataFrame, gap_minutes: int = 30) -> pd.DataFrame:
 
     return df
 
-def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> pd.DataFrame:
+def ingest_with_metadata(
+    history_path: str = "data/history.parquet", max_tracks: int = 50
+) -> IngestionResult:
     ingester = SpotifyIngester()
 
     if os.path.exists(history_path):
@@ -335,12 +359,12 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
         )
     except requests.exceptions.HTTPError as exc:
         print(f"Failed to fetch recently played tracks from Spotify: {exc}")
-        print("Returning existing history without new tracks.")
-        return existing_df if not existing_df.empty else pd.DataFrame()
+        print("No ingestion file was produced.")
+        return IngestionResult(existing_df, None, False)
 
     if not recent_items:
         print("No new tracks found.")
-        return existing_df if not existing_df.empty else pd.DataFrame()
+        return IngestionResult(existing_df, None, False)
 
     # Filter by timestamp if history is not empty
     # If history is empty, get all tracks (don't filter by timestamp)
@@ -380,7 +404,7 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
 
     if not new_records:
         print("No new tracks after filtering by timestamp.")
-        return existing_df if not existing_df.empty else pd.DataFrame()
+        return IngestionResult(existing_df, None, False)
 
     print(f"Processing {len(new_records)} new tracks")
     new_df = pd.DataFrame(new_records)
@@ -480,7 +504,17 @@ def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> 
     )
     
     # Return the new tracks DataFrame with session IDs
-    return new_tracks_with_sessions if new_tracks_with_sessions is not None and not new_tracks_with_sessions.empty else new_df
+    result_tracks = (
+        new_tracks_with_sessions
+        if new_tracks_with_sessions is not None and not new_tracks_with_sessions.empty
+        else new_df
+    )
+    return IngestionResult(result_tracks, ingestion_file, not new_df.empty)
+
+
+def ingest(history_path: str = "data/history.parquet", max_tracks: int = 50) -> pd.DataFrame:
+    """Backward-compatible ingestion API for local setup and external callers."""
+    return ingest_with_metadata(history_path=history_path, max_tracks=max_tracks).tracks
 
 def update_history_from_ingestion(ingestion_file_path: str,
                                   history_path: str = "data/history.parquet") -> pd.DataFrame:
@@ -516,9 +550,13 @@ def update_history_from_ingestion(ingestion_file_path: str,
     else:
         combined_df = new_df.copy()
     
-    # Drop rows with null values
+    # Optional prediction/metadata columns may legitimately be absent. Only
+    # enforce fields required to train and evaluate the models.
     rows_before = len(combined_df)
-    combined_df = combined_df.dropna()
+    required_columns = [
+        column for column in REQUIRED_HISTORY_COLUMNS if column in combined_df.columns
+    ]
+    combined_df = combined_df.dropna(subset=required_columns)
     rows_dropped = rows_before - len(combined_df)
     if rows_dropped > 0:
         print(f"Dropped {rows_dropped} rows with null values")
