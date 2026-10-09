@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-09T06:10:13.859827",
+  "generated_at": "2026-10-09T06:32:04.092198",
   "next_prediction": {
     "mood_cluster_id": 0,
     "mood_label": "High energy, negative",
-    "confidence": 0.43252908774670823,
+    "confidence": 0.3416252183644871,
     "cluster_centroid": {
       "valence": 0.26113669724770655,
       "energy": 0.6023440366972477,
@@ -18,34 +18,34 @@
     "validation_reliability": 0.38461538461538464,
     "validation_log_loss": 1.088093863133704,
     "predictability": "low",
-    "normalized_entropy": 0.9798235598291481,
+    "normalized_entropy": 0.999784113816437,
     "abstained": true,
     "context_level": null,
-    "switch_probability": 0.732323155264671,
+    "switch_probability": 0.6655823091864379,
     "recent_window_size": 3,
     "mood_distribution": [
       {
         "mood_cluster_id": 0,
         "mood_label": "High energy, negative",
-        "probability": 0.43252908774670823
-      },
-      {
-        "mood_cluster_id": 1,
-        "mood_label": "High energy, positive",
-        "probability": 0.2997940675179627
+        "probability": 0.3416252183644871
       },
       {
         "mood_cluster_id": 2,
         "mood_label": "Low energy, negative, acoustic",
-        "probability": 0.267676844735329
+        "probability": 0.33441769081356204
+      },
+      {
+        "mood_cluster_id": 1,
+        "mood_label": "High energy, positive",
+        "probability": 0.32395709082195084
       }
     ],
     "recommended_tracks": [
       {
-        "track_id": "45pI8224KKX9Gx5fiyvEAh",
-        "track_name": "The Blackest Day",
-        "artist_name": "Lana Del Rey",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e02a3b3f48ca81acacb3ad4ec8a"
+        "track_id": "7JtJjh9WfxUOpjFhurxVRW",
+        "track_name": "Quem \u00c9 Esse? - Ao Vivo",
+        "artist_name": "Julliany Souza",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02c64158b5d31790e90682790d"
       },
       {
         "track_id": "2GvmGmRSQKRv0OF2QzSakH",
@@ -105,7 +105,7 @@
     "6": 0.4714285714285714,
     "7": 0.9428571428571428,
     "8": 1.0,
-    "9": 0.7428571428571429,
+    "9": 0.7571428571428571,
     "10": 0.8428571428571429,
     "11": 0.6,
     "12": 0.38571428571428573,
@@ -164,9 +164,35 @@
       "time": "2026-10-08T19:15:00+00:00",
       "valence": 0.0362,
       "energy": 0.202
+    },
+    {
+      "time": "2026-10-08T19:45:00+00:00",
+      "valence": 0.284,
+      "energy": 0.402
+    },
+    {
+      "time": "2026-10-09T06:15:00+00:00",
+      "valence": 0.52,
+      "energy": 0.788
     }
   ],
   "recently_played": [
+    {
+      "track_id": "3oEkrIfXfSh9zGnE7eBzSV",
+      "track_name": "The Winner Takes It All",
+      "artist_name": "ABBA",
+      "played_at": "2026-10-09T06:29:22.542000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e024d08fc99eff4ed52dfce91fa",
+      "mood_cluster_id": 2
+    },
+    {
+      "track_id": "7gymMiUpp1AOYR5EiRDDrO",
+      "track_name": "Ethereal",
+      "artist_name": "Txmy",
+      "played_at": "2026-10-08T19:46:43.392000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e023ecfb69038cb68d0302099f3",
+      "mood_cluster_id": 2
+    },
     {
       "track_id": "6RK3IsiUW6YaSMEodbO4tk",
       "track_name": "Solitude - Felsmann + Tiley Reinterpretation",
@@ -350,22 +376,6 @@
       "played_at": "2026-10-05T11:31:47.427000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e02e3f1ba3de4659708c25d0f39",
       "mood_cluster_id": 1
-    },
-    {
-      "track_id": "7qjZnBKE73H4Oxkopwulqe",
-      "track_name": "back to friends",
-      "artist_name": "sombr",
-      "played_at": "2026-10-05T11:20:49.048000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024229702de91cb3d3a4383302",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0BxE4FqsDD1Ot4YuBXwAPp",
-      "track_name": "505",
-      "artist_name": "Arctic Monkeys",
-      "played_at": "2026-10-05T11:16:08.630000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02b1f8da74f225fa1225cdface",
-      "mood_cluster_id": 0
     }
   ],
   "metrics": {
@@ -3136,46 +3146,46 @@
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 18.832074193548387,
-        "recent_std": 28.3411174380823,
-        "prior_mean": 18.163612538226296,
-        "prior_std": 26.8036168003891,
-        "mean_pct_change": 3.680224150979202,
-        "std_pct_change": 5.73616855196527
+        "recent_mean": 18.411320370370373,
+        "recent_std": 27.869573552942775,
+        "prior_mean": 17.81432782874618,
+        "prior_std": 26.31623540602544,
+        "mean_pct_change": 3.351193193272511,
+        "std_pct_change": 5.902584936452106
       },
       "sessions_per_day": {
-        "recent_mean": 3.875,
-        "recent_std": 1.6909686573085854,
+        "recent_mean": 3.375,
+        "recent_std": 1.8666480653835098,
         "prior_mean": 3.6333333333333333,
         "prior_std": 1.81628436344337,
-        "mean_pct_change": 6.651376146788992,
-        "std_pct_change": -6.8995642233690315
+        "mean_pct_change": -7.110091743119265,
+        "std_pct_change": 2.772897402731509
       },
       "tracks_per_day": {
-        "recent_mean": 14.0,
-        "recent_std": 9.12414379544733,
-        "prior_mean": 13.033333333333333,
-        "prior_std": 8.40429784230796,
-        "mean_pct_change": 7.4168797953964205,
-        "std_pct_change": 8.56521230739352
+        "recent_mean": 11.375,
+        "recent_std": 9.177928687890313,
+        "prior_mean": 12.833333333333334,
+        "prior_std": 8.087370126039461,
+        "mean_pct_change": -11.363636363636367,
+        "std_pct_change": 13.484711900837892
       },
       "start_hour_entropy": {
-        "recent": 3.550655181215039,
-        "prior": 4.050379273534372,
-        "change": -0.49972409231933357,
-        "pct_change": -12.337711077690582
+        "recent": 3.606015279620733,
+        "prior": 4.050763163258834,
+        "change": -0.4447478836381009,
+        "pct_change": -10.979360325778757
       },
       "drift_summary": {
         "drift_detected": false,
         "threshold": 20.0,
-        "max_pct_change": 12.337711077690582
+        "max_pct_change": 11.363636363636367
       }
     },
     "label_drift": {
       "session_start_rate": {
-        "recent": 3.875,
+        "recent": 3.375,
         "prior": 3.6333333333333333,
-        "pct_change": 6.651376146788992
+        "pct_change": -7.110091743119265
       },
       "days_with_sessions": {
         "recent": 1.1428571428571428,
@@ -3204,24 +3214,24 @@
           "pct_change": -100.0
         },
         "4": {
-          "recent": 4.0,
-          "prior": 10.0,
-          "pct_change": -60.0
+          "recent": 3.0,
+          "prior": 11.0,
+          "pct_change": -72.72727272727273
         },
         "5": {
-          "recent": 4.0,
+          "recent": 3.0,
           "prior": 16.0,
-          "pct_change": -75.0
+          "pct_change": -81.25
         },
         "6": {
           "recent": 3.0,
-          "prior": 9.0,
-          "pct_change": -66.66666666666666
+          "prior": 10.0,
+          "pct_change": -70.0
         },
         "7": {
-          "recent": 4.0,
-          "prior": 7.0,
-          "pct_change": -42.857142857142854
+          "recent": 3.0,
+          "prior": 8.0,
+          "pct_change": -62.5
         },
         "8": {
           "recent": 1.0,
@@ -3244,18 +3254,18 @@
           "pct_change": -100.0
         },
         "12": {
-          "recent": 3.0,
-          "prior": 2.0,
-          "pct_change": 50.0
+          "recent": 2.0,
+          "prior": 3.0,
+          "pct_change": -33.33333333333333
         },
         "13": {
           "recent": 2.0,
-          "prior": 6.0,
-          "pct_change": -66.66666666666666
+          "prior": 5.0,
+          "pct_change": -60.0
         },
         "14": {
           "recent": 0.0,
-          "prior": 11.0,
+          "prior": 9.0,
           "pct_change": -100.0
         },
         "15": {
@@ -3270,7 +3280,7 @@
         },
         "17": {
           "recent": 0.0,
-          "prior": 4.0,
+          "prior": 3.0,
           "pct_change": -100.0
         },
         "18": {
@@ -3311,6 +3321,6 @@
       }
     },
     "overall_drift_detected": false,
-    "detection_date": "2026-10-09T06:10:13.844726"
+    "detection_date": "2026-10-09T06:32:04.032847"
   }
 }
