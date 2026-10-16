@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-16T04:33:37.183614",
+  "generated_at": "2026-10-16T06:12:22.266578",
   "next_prediction": {
     "mood_cluster_id": 1,
     "mood_label": "High energy, positive",
-    "confidence": 0.37109672013143324,
+    "confidence": 0.5630672023582769,
     "cluster_centroid": {
       "valence": 0.668473776223776,
       "energy": 0.745756993006993,
@@ -17,27 +17,27 @@
     "confidence_kind": "calibrated_model_probability",
     "validation_reliability": 0.4268774703557312,
     "validation_log_loss": 1.0579978413664697,
-    "predictability": "low",
-    "normalized_entropy": 0.9970992000612637,
-    "abstained": true,
+    "predictability": "medium",
+    "normalized_entropy": 0.8993426395421457,
+    "abstained": false,
     "context_level": null,
-    "switch_probability": 0.6289032798685668,
+    "switch_probability": 0.4369327976417232,
     "recent_window_size": 3,
     "mood_distribution": [
       {
         "mood_cluster_id": 1,
         "mood_label": "High energy, positive",
-        "probability": 0.37109672013143324
-      },
-      {
-        "mood_cluster_id": 2,
-        "mood_label": "Low energy, negative, acoustic",
-        "probability": 0.3177163556506358
+        "probability": 0.5630672023582769
       },
       {
         "mood_cluster_id": 0,
         "mood_label": "High energy, negative",
-        "probability": 0.31118692421793104
+        "probability": 0.2189020336833057
+      },
+      {
+        "mood_cluster_id": 2,
+        "mood_label": "Low energy, negative, acoustic",
+        "probability": 0.21803076395841747
       }
     ],
     "recommended_tracks": [
@@ -48,10 +48,10 @@
         "image_url": "https://i.scdn.co/image/ab67616d00001e022b46078245d0120690eb560d"
       },
       {
-        "track_id": "2bPGTMB5sFfFYQ2YvSmup0",
-        "track_name": "Deutschland",
-        "artist_name": "Rammstein",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e0202add2c77fb6999e311a3248"
+        "track_id": "4OrDHBIn0eJqwkzRHYsB0L",
+        "track_name": "Falou Rodeio",
+        "artist_name": "Brenno & Matheus",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02cd0a8c5c6cf9c917dd3b8399"
       }
     ]
   },
@@ -189,9 +189,22 @@
       "time": "2026-10-15T11:45:00+00:00",
       "valence": 0.649,
       "energy": 0.749
+    },
+    {
+      "time": "2026-10-15T12:00:00+00:00",
+      "valence": 0.807,
+      "energy": 0.832
     }
   ],
   "recently_played": [
+    {
+      "track_id": "0YJ9FWWHn9EfnN0lHwbzvV",
+      "track_name": "Jigsaw Falling Into Place",
+      "artist_name": "Radiohead",
+      "played_at": "2026-10-15T12:01:41.411000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02de3c04b5fc750b68899b20a9",
+      "mood_cluster_id": 1
+    },
     {
       "track_id": "5ruzrDWcT0vuJIOMW7gMnW",
       "track_name": "The Adults Are Talking",
@@ -381,14 +394,6 @@
       "track_name": "Cry Baby",
       "artist_name": "The Neighbourhood",
       "played_at": "2026-10-12T06:39:38.345000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e025260c62db020e5861a51556d",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0EfsDEYaSjGYd66Pr881nq",
-      "track_name": "Cry Baby",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-10-12T06:08:04.005000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e025260c62db020e5861a51556d",
       "mood_cluster_id": 0
     }
@@ -3161,12 +3166,12 @@
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 18.789064814814814,
-        "recent_std": 24.829018723622994,
+        "recent_mean": 19.64336574074074,
+        "recent_std": 24.945753741008122,
         "prior_mean": 19.08601843657817,
         "prior_std": 27.878503997508318,
-        "mean_pct_change": -1.5558699303896992,
-        "std_pct_change": -10.938482474374794
+        "mean_pct_change": 2.920186344860811,
+        "std_pct_change": -10.519754778672178
       },
       "sessions_per_day": {
         "recent_mean": 2.5714285714285716,
@@ -3177,12 +3182,12 @@
         "std_pct_change": -18.943730397608842
       },
       "tracks_per_day": {
-        "recent_mean": 8.714285714285714,
-        "recent_std": 5.699982098074286,
+        "recent_mean": 8.857142857142858,
+        "recent_std": 5.792324266489512,
         "prior_mean": 13.6,
         "prior_std": 7.2046281421504785,
-        "mean_pct_change": -35.92436974789916,
-        "std_pct_change": -20.88443725878512
+        "mean_pct_change": -34.87394957983192,
+        "std_pct_change": -19.602731019500112
       },
       "start_hour_entropy": {
         "recent": 3.03856233607563,
@@ -3193,7 +3198,7 @@
       "drift_summary": {
         "drift_detected": true,
         "threshold": 20.0,
-        "max_pct_change": 35.92436974789916
+        "max_pct_change": 34.87394957983192
       }
     },
     "label_drift": {
@@ -3336,6 +3341,6 @@
       }
     },
     "overall_drift_detected": true,
-    "detection_date": "2026-10-16T04:33:37.165253"
+    "detection_date": "2026-10-16T06:12:22.199187"
   }
 }
