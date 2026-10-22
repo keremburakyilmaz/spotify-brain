@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-10-22T04:46:23.705295",
+  "generated_at": "2026-10-22T05:14:03.692099",
   "next_prediction": {
     "mood_cluster_id": 0,
     "mood_label": "Medium energy, negative",
-    "confidence": 0.5014979325362371,
+    "confidence": 0.5189110568357715,
     "cluster_centroid": {
       "valence": 0.24766267985611504,
       "energy": 0.5931007194244604,
@@ -17,41 +17,41 @@
     "confidence_kind": "calibrated_model_probability",
     "validation_reliability": 0.5354330708661418,
     "validation_log_loss": 0.9845566373579776,
-    "predictability": "medium",
-    "normalized_entropy": 0.8863541735044634,
-    "abstained": false,
+    "predictability": "low",
+    "normalized_entropy": 0.9064915606466102,
+    "abstained": true,
     "context_level": null,
-    "switch_probability": 0.49850206746376285,
+    "switch_probability": 0.48108894316422846,
     "recent_window_size": 3,
     "mood_distribution": [
       {
         "mood_cluster_id": 0,
         "mood_label": "Medium energy, negative",
-        "probability": 0.5014979325362371
+        "probability": 0.5189110568357715
       },
       {
         "mood_cluster_id": 1,
         "mood_label": "High energy, positive",
-        "probability": 0.37361072451583144
+        "probability": 0.3246180300720904
       },
       {
         "mood_cluster_id": 2,
         "mood_label": "Low energy, negative, acoustic",
-        "probability": 0.12489134294793143
+        "probability": 0.15647091309213804
       }
     ],
     "recommended_tracks": [
       {
-        "track_id": "6Pur3hWy6Nzc27ilmsp5HA",
-        "track_name": "Lamento Boliviano",
-        "artist_name": "Los Enanitos Verdes",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e0235bf8a2179962114b8ec7585"
+        "track_id": "7vFoFDWqTX0mHzLfrF1Cfy",
+        "track_name": "Cheerleader (Felix Jaehn Remix) - Radio Edit",
+        "artist_name": "OMI, felix jaehn",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e0285ca00029c70d6b5b8372e96"
       },
       {
-        "track_id": "0ZBwuwhe9VnrKQvK0xPV1W",
-        "track_name": "5 Minutos",
-        "artist_name": "De La Rose",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e0286fc28a2d167cd3fc790995e"
+        "track_id": "7DY756WOLyOz2Xnhw4EFiC",
+        "track_name": "S\u00e3o Paulo (feat. Anitta)",
+        "artist_name": "The Weeknd, Anitta",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02de79f330bc297af3fae736da"
       }
     ]
   },
@@ -75,7 +75,7 @@
     "16": 0.25,
     "17": 0.1875,
     "18": 0.125,
-    "19": 0.125,
+    "19": 0.15625,
     "20": 0.03125,
     "21": 0.125,
     "22": 0.09375,
@@ -115,7 +115,7 @@
     "16": 0.5675675675675675,
     "17": 0.7027027027027027,
     "18": 0.4594594594594595,
-    "19": 0.5135135135135135,
+    "19": 0.527027027027027,
     "20": 0.32432432432432434,
     "21": 0.32432432432432434,
     "22": 0.25675675675675674,
@@ -161,11 +161,6 @@
   ],
   "mood_trajectory": [
     {
-      "time": "2026-10-21T04:45:00+00:00",
-      "valence": 0.282,
-      "energy": 0.563
-    },
-    {
       "time": "2026-10-21T05:30:00+00:00",
       "valence": 0.3463333333333334,
       "energy": 0.654
@@ -209,9 +204,22 @@
       "time": "2026-10-21T15:15:00+00:00",
       "valence": 0.172,
       "energy": 0.697
+    },
+    {
+      "time": "2026-10-21T16:00:00+00:00",
+      "valence": 0.37,
+      "energy": 0.568
     }
   ],
   "recently_played": [
+    {
+      "track_id": "2K7xn816oNHJZ0aVqdQsha",
+      "track_name": "Softcore",
+      "artist_name": "The Neighbourhood",
+      "played_at": "2026-10-21T16:01:09.775000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e029b6ac98a52f62d5cb473da40",
+      "mood_cluster_id": 0
+    },
     {
       "track_id": "0uMZbmAAgOhdMrv25iPEH6",
       "track_name": "Goth",
@@ -403,14 +411,6 @@
       "played_at": "2026-10-20T05:48:24.150000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e023f5526e4e33d3ae8d79db0b1",
       "mood_cluster_id": 1
-    },
-    {
-      "track_id": "38kjFXYgPvtuXCPbHPMGte",
-      "track_name": "Prey",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-10-20T05:29:49.581000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e025260c62db020e5861a51556d",
-      "mood_cluster_id": 0
     }
   ],
   "metrics": {
@@ -3181,46 +3181,46 @@
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 23.919781481481476,
-        "recent_std": 30.14842986673111,
+        "recent_mean": 23.065503571428565,
+        "recent_std": 29.93610638735285,
         "prior_mean": 18.676765396825395,
         "prior_std": 25.009778279254906,
-        "mean_pct_change": 28.072398904508745,
-        "std_pct_change": 20.546569945958336
+        "mean_pct_change": 23.49838465791914,
+        "std_pct_change": 19.69760808389186
       },
       "sessions_per_day": {
-        "recent_mean": 3.375,
-        "recent_std": 1.4947825928876748,
+        "recent_mean": 3.5,
+        "recent_std": 1.7320508075688772,
         "prior_mean": 3.6206896551724137,
         "prior_std": 1.4242673398664405,
-        "mean_pct_change": -6.785714285714284,
-        "std_pct_change": 4.950984344543547
+        "mean_pct_change": -3.3333333333333313,
+        "std_pct_change": 21.60995053999475
       },
       "tracks_per_day": {
-        "recent_mean": 13.5,
-        "recent_std": 8.5,
+        "recent_mean": 13.625,
+        "recent_std": 8.513775601928911,
         "prior_mean": 12.448275862068966,
         "prior_std": 7.10796642384591,
-        "mean_pct_change": 8.448753462603872,
-        "std_pct_change": 19.58413269207457
+        "mean_pct_change": 9.452908587257612,
+        "std_pct_change": 19.7779377990134
       },
       "start_hour_entropy": {
-        "recent": 3.528242484431478,
+        "recent": 3.6245186549588992,
         "prior": 3.992618739514675,
-        "change": -0.4643762550831969,
-        "pct_change": -11.630868995511563
+        "change": -0.3681000845557758,
+        "pct_change": -9.219515024380225
       },
       "drift_summary": {
         "drift_detected": true,
         "threshold": 20.0,
-        "max_pct_change": 28.072398904508745
+        "max_pct_change": 23.49838465791914
       }
     },
     "label_drift": {
       "session_start_rate": {
-        "recent": 3.375,
+        "recent": 3.5,
         "prior": 3.6206896551724137,
-        "pct_change": -6.785714285714284
+        "pct_change": -3.3333333333333313
       },
       "days_with_sessions": {
         "recent": 1.1428571428571428,
@@ -3309,9 +3309,9 @@
           "pct_change": -80.0
         },
         "16": {
-          "recent": 0.0,
+          "recent": 1.0,
           "prior": 4.0,
-          "pct_change": -100.0
+          "pct_change": -75.0
         },
         "17": {
           "recent": 0.0,
@@ -3356,6 +3356,6 @@
       }
     },
     "overall_drift_detected": true,
-    "detection_date": "2026-10-22T04:46:23.686790"
+    "detection_date": "2026-10-22T05:14:03.626370"
   }
 }
