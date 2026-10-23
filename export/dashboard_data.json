@@ -1,57 +1,63 @@
 {
-  "generated_at": "2026-10-23T12:46:33.602816",
+  "generated_at": "2026-10-23T17:46:09.600409",
   "next_prediction": {
-    "mood_cluster_id": 1,
-    "mood_label": "High energy, positive",
-    "confidence": 0.5759168729240698,
+    "mood_cluster_id": 0,
+    "mood_label": "Medium energy, negative",
+    "confidence": 0.5008965478138022,
     "cluster_centroid": {
-      "valence": 0.6469771217712179,
-      "energy": 0.74789963099631,
-      "danceability": 0.603589667896679,
-      "acousticness": 0.12518503402214046,
-      "instrumentalness": 0.05330094127675262,
-      "tempo_norm": 0.5016371837638376
+      "valence": 0.2474306654676255,
+      "energy": 0.592193345323741,
+      "danceability": 0.4871852517985611,
+      "acousticness": 0.12137565530575528,
+      "instrumentalness": 0.14447735903776973,
+      "tempo_norm": 0.46296237410071944
     },
     "model_version": "d513b804",
     "prediction_source": "two_stage_model",
     "confidence_kind": "calibrated_model_probability",
     "validation_reliability": 0.5354330708661418,
     "validation_log_loss": 0.9817324447074367,
-    "predictability": "medium",
-    "normalized_entropy": 0.8855678949240329,
-    "abstained": false,
+    "predictability": "low",
+    "normalized_entropy": 0.9282706237269143,
+    "abstained": true,
     "context_level": null,
-    "switch_probability": 0.42408312707593027,
+    "switch_probability": 0.49910345218619784,
     "recent_window_size": 3,
     "mood_distribution": [
       {
-        "mood_cluster_id": 1,
-        "mood_label": "High energy, positive",
-        "probability": 0.5759168729240698
-      },
-      {
         "mood_cluster_id": 0,
         "mood_label": "Medium energy, negative",
-        "probability": 0.23564103772188252
+        "probability": 0.5008965478138022
+      },
+      {
+        "mood_cluster_id": 1,
+        "mood_label": "High energy, positive",
+        "probability": 0.3184797537201593
       },
       {
         "mood_cluster_id": 2,
         "mood_label": "Low energy, negative, acoustic",
-        "probability": 0.18844208935404774
+        "probability": 0.18062369846603854
       }
     ],
     "recommended_tracks": [
       {
-        "track_id": "2aQpISWUBToaF84DDiTeRV",
-        "track_name": "Be My Lover (feat. La Bouche) - 2023 Mix",
-        "artist_name": "Hypaton, David Guetta, La Bouche",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e02754b60ff544913e276fbc260"
+        "track_id": "5f4Hy5mw5SRaUgXX9c6P5S",
+        "track_name": "Sum 2 Prove",
+        "artist_name": "Lil Baby",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02f46a9ad551acbdab8f72fd89"
       },
       {
-        "track_id": "3H7ihDc1dqLriiWXwsc2po",
-        "track_name": "Breaking Me",
-        "artist_name": "Topic, A7S",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e02ca801dab96017456b9847ac2"
+        "track_id": "7dk7jxKBun1JQ2pPPBxDYl",
+        "track_name": "Boyfriend",
+        "artist_name": "YEONJUN",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e027799d4fd3d71da30add3336f"
+      },
+      {
+        "track_id": "63hHlajVLQnlFMAqSyePxO",
+        "track_name": "Black Beauty",
+        "artist_name": "Lana Del Rey",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e021624590458126fc8b8c64c2f"
       }
     ]
   },
@@ -73,26 +79,26 @@
     "14": 0.11353729665279388,
     "15": 0.10785604268312454,
     "16": 0.06680462509393692,
-    "17": 0.1713116466999054,
-    "18": 0.10403760522603989,
+    "17": 0.09056705236434937,
+    "18": 0.16022652387619019,
     "19": 0.09974532574415207,
-    "20": 0.05278269574046135,
-    "21": 0.35485339164733887,
-    "22": 0.06773680448532104,
-    "23": 0.2917402982711792
+    "20": 0.040154341608285904,
+    "21": 0.14328481256961823,
+    "22": 0.10911719501018524,
+    "23": 0.31963926553726196
   },
   "top_hours": [
     {
-      "hour": 21,
-      "probability": 0.35485339164733887
+      "hour": 23,
+      "probability": 0.31963926553726196
     },
     {
       "hour": 5,
       "probability": 0.30997440218925476
     },
     {
-      "hour": 23,
-      "probability": 0.2917402982711792
+      "hour": 4,
+      "probability": 0.2771543264389038
     }
   ],
   "session_actual": {
@@ -112,7 +118,7 @@
     "13": 0.44,
     "14": 0.49333333333333335,
     "15": 0.4,
-    "16": 0.56,
+    "16": 0.5733333333333334,
     "17": 0.6933333333333334,
     "18": 0.4533333333333333,
     "19": 0.52,
@@ -179,215 +185,265 @@
       "time": "2026-10-23T12:15:00+00:00",
       "valence": 0.6156666666666667,
       "energy": 0.8026666666666666
+    },
+    {
+      "time": "2026-10-23T13:15:00+00:00",
+      "valence": 0.718,
+      "energy": 0.84
+    },
+    {
+      "time": "2026-10-23T13:30:00+00:00",
+      "valence": 0.282,
+      "energy": 0.613
+    },
+    {
+      "time": "2026-10-23T13:45:00+00:00",
+      "valence": 0.8855,
+      "energy": 0.7875000000000001
+    },
+    {
+      "time": "2026-10-23T14:00:00+00:00",
+      "valence": 0.592,
+      "energy": 0.87925
+    },
+    {
+      "time": "2026-10-23T14:15:00+00:00",
+      "valence": 0.6562,
+      "energy": 0.8276
+    },
+    {
+      "time": "2026-10-23T14:30:00+00:00",
+      "valence": 0.36483333333333334,
+      "energy": 0.7516666666666666
+    },
+    {
+      "time": "2026-10-23T14:45:00+00:00",
+      "valence": 0.425,
+      "energy": 0.6506666666666666
+    },
+    {
+      "time": "2026-10-23T15:00:00+00:00",
+      "valence": 0.489,
+      "energy": 0.928
+    },
+    {
+      "time": "2026-10-23T15:15:00+00:00",
+      "valence": 0.70625,
+      "energy": 0.70225
+    },
+    {
+      "time": "2026-10-23T15:30:00+00:00",
+      "valence": 0.4083333333333334,
+      "energy": 0.79
     }
   ],
   "recently_played": [
     {
-      "track_id": "0YJ9FWWHn9EfnN0lHwbzvV",
-      "track_name": "Jigsaw Falling Into Place",
-      "artist_name": "Radiohead",
-      "played_at": "2026-10-23T12:25:07.550000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02de3c04b5fc750b68899b20a9",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "3oEkrIfXfSh9zGnE7eBzSV",
-      "track_name": "The Winner Takes It All",
-      "artist_name": "ABBA",
-      "played_at": "2026-10-23T12:21:04.662000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024d08fc99eff4ed52dfce91fa",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "3oEkrIfXfSh9zGnE7eBzSV",
-      "track_name": "The Winner Takes It All",
-      "artist_name": "ABBA",
-      "played_at": "2026-10-23T12:16:15.163000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024d08fc99eff4ed52dfce91fa",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "0U0ldCRmgCqhVvD6ksG63j",
-      "track_name": "Nightcall",
-      "artist_name": "Kavinsky",
-      "played_at": "2026-10-23T08:38:04.749000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02d6d8c2eaa1f9031b62f7a3f7",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0uMZbmAAgOhdMrv25iPEH6",
-      "track_name": "Goth",
-      "artist_name": "Sidewalks and Skeletons",
-      "played_at": "2026-10-23T08:13:33.071000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02bbaf9de6c418a0aa6cb7b938",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "1cwth5tNynCfH2ZYCmShDc",
-      "track_name": "Pembe Mezarl\u0131k",
-      "artist_name": "Model",
-      "played_at": "2026-10-23T04:09:11.521000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e023f5526e4e33d3ae8d79db0b1",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "0FVuyC9RP5MACjp4lgU3qZ",
-      "track_name": "I'm God",
-      "artist_name": "Clams Casino, Imogen Heap",
-      "played_at": "2026-10-22T05:53:55.670000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02d57e3b601a8171f7e122b2ea",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "1SHB1hp6267UK9bJQUxYvO",
-      "track_name": "\u0421\u0443\u0434\u043d\u043e (\u0411\u043e\u0440\u0438\u0441 \u0420\u044b\u0436\u0438\u0439)",
-      "artist_name": "Molchat Doma",
-      "played_at": "2026-10-22T05:36:55.209000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02d4549c0e601fbe7e8622a2f5",
-      "mood_cluster_id": 2
-    },
-    {
       "track_id": "1JgknGBbrfmEHeOZH051SS",
       "track_name": "ecstacy - slowed",
       "artist_name": "SUICIDAL-IDOL",
-      "played_at": "2026-10-22T05:30:35.807000+00:00",
+      "played_at": "2026-10-23T15:36:45.867000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e02cddfe70492c57a78e4d86b1c",
       "mood_cluster_id": 0
     },
     {
-      "track_id": "2K7xn816oNHJZ0aVqdQsha",
-      "track_name": "Softcore",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-10-21T16:01:09.775000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e029b6ac98a52f62d5cb473da40",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0uMZbmAAgOhdMrv25iPEH6",
-      "track_name": "Goth",
-      "artist_name": "Sidewalks and Skeletons",
-      "played_at": "2026-10-21T15:24:48.375000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02bbaf9de6c418a0aa6cb7b938",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0YJ9FWWHn9EfnN0lHwbzvV",
-      "track_name": "Jigsaw Falling Into Place",
-      "artist_name": "Radiohead",
-      "played_at": "2026-10-21T14:53:33.666000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02de3c04b5fc750b68899b20a9",
+      "track_id": "0vf2eBw2inhl8y61cYQMv2",
+      "track_name": "Devil Town",
+      "artist_name": "Cavetown",
+      "played_at": "2026-10-23T15:34:52.667000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e029ed6b04a8fe894a9204630f6",
       "mood_cluster_id": 1
     },
     {
-      "track_id": "7qjZnBKE73H4Oxkopwulqe",
-      "track_name": "back to friends",
-      "artist_name": "sombr",
-      "played_at": "2026-10-21T14:38:41.088000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024229702de91cb3d3a4383302",
+      "track_id": "7F25roCtYi55JouckaayPC",
+      "track_name": "Judas",
+      "artist_name": "Lady Gaga",
+      "played_at": "2026-10-23T15:31:58.771000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02a5d31644260279be8d0c46c0",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "6ap9lSRJ0iLriGLqoJ44cq",
+      "track_name": "CITY OF ANGELS",
+      "artist_name": "24kGoldn",
+      "played_at": "2026-10-23T15:27:55.686000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02fe9008022f3f54d81dcc8030",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "0o2Jngx6YVivDjE6RqqFlF",
+      "track_name": "roxstar",
+      "artist_name": "raspy, Bangers Only",
+      "played_at": "2026-10-23T15:26:09.175000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e027a6fd747a5f782ed517b60fc",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "2PnlsTsOTLE5jnBnNe2K0A",
+      "track_name": "The Emptiness Machine",
+      "artist_name": "Linkin Park",
+      "played_at": "2026-10-23T15:23:44.271000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02263d80522efd7277ab2bb822",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "7j31rVgGX9Q2blT92VBEA0",
+      "track_name": "Teenagers",
+      "artist_name": "My Chemical Romance",
+      "played_at": "2026-10-23T15:17:46.763000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02663b6ce496144fa5c3670ac0",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "3fgehc497TFqKH1zBL2YNK",
+      "track_name": "Heavy Is the Crown",
+      "artist_name": "Linkin Park",
+      "played_at": "2026-10-23T15:09:37.802000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02b25f445c40bb5cd1e22ec272",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "02XnQdf7sipaKBBHixz3Zp",
+      "track_name": "Paparazzi",
+      "artist_name": "Lady Gaga",
+      "played_at": "2026-10-23T14:59:01.169000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02e691217483df8798445c82e2",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "1ACA277B6f46DYCgZW8di3",
+      "track_name": "if u think i'm pretty",
+      "artist_name": "Artemas",
+      "played_at": "2026-10-23T14:48:35.866000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e0298921aa7be90fbd895fdbd3c",
+      "mood_cluster_id": 2
+    },
+    {
+      "track_id": "5sMEEjviCkH6Rp5X2ZvIIc",
+      "track_name": "Everything is romantic",
+      "artist_name": "Charli xcx",
+      "played_at": "2026-10-23T14:46:33.633000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02f88b43d15fd14e9525338b59",
       "mood_cluster_id": 0
     },
     {
-      "track_id": "0EfsDEYaSjGYd66Pr881nq",
-      "track_name": "Cry Baby",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-10-21T14:35:28.061000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e025260c62db020e5861a51556d",
+      "track_id": "6s0mCmiQV9HzfTfKvG14a1",
+      "track_name": "eyes don't lie sped up",
+      "artist_name": "Isabel LaRosa",
+      "played_at": "2026-10-23T14:43:15.686000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02efc98155cf420a04095b59b2",
       "mood_cluster_id": 0
     },
     {
-      "track_id": "40gvh6jP5qxMJuMmF9lG9A",
-      "track_name": "Baby Came Home 2 / Valentines",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-10-21T14:31:23.914000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e025260c62db020e5861a51556d",
-      "mood_cluster_id": 0
+      "track_id": "0vf2eBw2inhl8y61cYQMv2",
+      "track_name": "Devil Town",
+      "artist_name": "Cavetown",
+      "played_at": "2026-10-23T14:37:33.189000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e029ed6b04a8fe894a9204630f6",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "7F25roCtYi55JouckaayPC",
+      "track_name": "Judas",
+      "artist_name": "Lady Gaga",
+      "played_at": "2026-10-23T14:34:39.293000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02a5d31644260279be8d0c46c0",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "2PnlsTsOTLE5jnBnNe2K0A",
+      "track_name": "The Emptiness Machine",
+      "artist_name": "Linkin Park",
+      "played_at": "2026-10-23T14:28:05.908000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02263d80522efd7277ab2bb822",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "7j31rVgGX9Q2blT92VBEA0",
+      "track_name": "Teenagers",
+      "artist_name": "My Chemical Romance",
+      "played_at": "2026-10-23T14:25:01.494000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02663b6ce496144fa5c3670ac0",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "2yR2sziCF4WEs3klW1F38d",
+      "track_name": "KEEP UP",
+      "artist_name": "Odetari",
+      "played_at": "2026-10-23T14:21:46.411000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02e06c1525c488705c512884bd",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "3fgehc497TFqKH1zBL2YNK",
+      "track_name": "Heavy Is the Crown",
+      "artist_name": "Linkin Park",
+      "played_at": "2026-10-23T14:19:39.190000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02b25f445c40bb5cd1e22ec272",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "3QJsSWa0Xo8MfaRn1gr4Be",
+      "track_name": "Favorite",
+      "artist_name": "Isabel LaRosa",
+      "played_at": "2026-10-23T14:15:36.793000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02c055ed2d667f03ae6b35bdc2",
+      "mood_cluster_id": 1
     },
     {
       "track_id": "3jjsRKEsF42ccXf8kWR3nu",
       "track_name": "Washing Machine Heart",
       "artist_name": "Mitski",
-      "played_at": "2026-10-21T14:18:00.315000+00:00",
+      "played_at": "2026-10-23T14:13:29.196000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e02c428f67b4a9b7e1114dfc117",
       "mood_cluster_id": 1
     },
     {
-      "track_id": "38kjFXYgPvtuXCPbHPMGte",
-      "track_name": "Prey",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-10-21T12:57:05.758000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e025260c62db020e5861a51556d",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "5ruzrDWcT0vuJIOMW7gMnW",
-      "track_name": "The Adults Are Talking",
-      "artist_name": "The Strokes",
-      "played_at": "2026-10-21T12:20:56.615000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02e3f1ba3de4659708c25d0f39",
+      "track_id": "6IbnUaczZBT34DhaD6S18F",
+      "track_name": "Bubblegum Bitch",
+      "artist_name": "MARINA",
+      "played_at": "2026-10-23T14:11:10.479000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02203e4c6a048df02a21cdd813",
       "mood_cluster_id": 1
     },
     {
-      "track_id": "3oEkrIfXfSh9zGnE7eBzSV",
-      "track_name": "The Winner Takes It All",
-      "artist_name": "ABBA",
-      "played_at": "2026-10-21T11:55:55.825000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024d08fc99eff4ed52dfce91fa",
+      "track_id": "7FKLbfLP8JK1MXKRrYx4Kd",
+      "track_name": "i like the way you kiss me - burnt",
+      "artist_name": "Artemas",
+      "played_at": "2026-10-23T14:08:41.373000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02545b91b453024f4be8c72da0",
       "mood_cluster_id": 1
     },
     {
-      "track_id": "2FEWcWHnDmGD6WSqpW4VYu",
-      "track_name": "This I Love",
-      "artist_name": "Guns N' Roses",
-      "played_at": "2026-10-21T05:45:25.394000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02e29a351729da4d29214e54e2",
-      "mood_cluster_id": 2
-    },
-    {
-      "track_id": "0BxE4FqsDD1Ot4YuBXwAPp",
-      "track_name": "505",
-      "artist_name": "Arctic Monkeys",
-      "played_at": "2026-10-21T05:39:57.003000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02b1f8da74f225fa1225cdface",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "1k5iH4KDKi56MFvlnrALNV",
-      "track_name": "Rock 'n' Roll Suicide - 2012 Remaster",
-      "artist_name": "David Bowie",
-      "played_at": "2026-10-21T05:35:49.458000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02c41f4e1133b0e6c5fcf58680",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "3oEkrIfXfSh9zGnE7eBzSV",
-      "track_name": "The Winner Takes It All",
-      "artist_name": "ABBA",
-      "played_at": "2026-10-21T05:32:57.183000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024d08fc99eff4ed52dfce91fa",
+      "track_id": "3AoEQRuFf8zVXWqSLo2UOi",
+      "track_name": "CRAZY",
+      "artist_name": "LE SSERAFIM",
+      "played_at": "2026-10-23T14:05:28.377000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e0213134929dd979f89b8f4f477",
       "mood_cluster_id": 1
     },
     {
-      "track_id": "6UuVONmxXwTKN1ISepuAoQ",
-      "track_name": "Forget Her",
-      "artist_name": "Jeff Buckley",
-      "played_at": "2026-10-21T04:56:08.390000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02afc2d1d2c8703a10aeded0af",
-      "mood_cluster_id": 0
+      "track_id": "46aZJc0z1HHHSFxaIRxYSP",
+      "track_name": "Breakin' Dishes",
+      "artist_name": "Rihanna",
+      "played_at": "2026-10-23T13:59:00.273000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02f9f27162ab1ed45b8d7a7e98",
+      "mood_cluster_id": 1
     },
     {
-      "track_id": "7IL8PSVwLOJxqYne6azxQv",
-      "track_name": "Pretty Boy",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-10-20T20:45:01.305000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e025aa30ba7fff59083baccc773",
+      "track_id": "61YzdCCBPM5Pc7lIiD5i8C",
+      "track_name": "Bang Bang",
+      "artist_name": "K'NAAN, Adam Levine",
+      "played_at": "2026-10-23T13:50:34.738000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02a3a8f20705f6f1d9adf84551",
       "mood_cluster_id": 1
     }
   ],
   "metrics": {
     "latest": {
-      "run_at": "2026-10-23T07:07:23.436310",
-      "num_tracks": 3209,
-      "num_sessions": 807,
+      "run_at": "2026-10-23T12:46:33.670476",
+      "num_tracks": 3214,
+      "num_sessions": 809,
       "mood_model": {
         "train_accuracy": 0.5837755875663382,
         "val_accuracy": 0.47244094488188976,
@@ -457,46 +513,46 @@
       "drift": {
         "feature_drift": {
           "session_duration": {
-            "recent_mean": 23.012601333333333,
-            "recent_std": 31.185119275717927,
+            "recent_mean": 22.54504135802469,
+            "recent_std": 30.128804005609375,
             "prior_mean": 18.21254741100324,
             "prior_std": 23.986364868706296,
-            "mean_pct_change": 26.355752515049634,
-            "std_pct_change": 30.01186068174696
+            "mean_pct_change": 23.788511564307278,
+            "std_pct_change": 25.608045114484124
           },
           "sessions_per_day": {
-            "recent_mean": 3.125,
-            "recent_std": 2.027159342528357,
+            "recent_mean": 3.375,
+            "recent_std": 1.8666480653835098,
             "prior_mean": 3.5517241379310347,
             "prior_std": 1.4523751509415646,
-            "mean_pct_change": -12.014563106796123,
-            "std_pct_change": 39.57546307606295
+            "mean_pct_change": -4.975728155339811,
+            "std_pct_change": 28.52382279973429
           },
           "tracks_per_day": {
-            "recent_mean": 11.875,
-            "recent_std": 9.700998659931873,
+            "recent_mean": 12.5,
+            "recent_std": 9.12414379544733,
             "prior_mean": 12.172413793103448,
             "prior_std": 7.235301225849223,
-            "mean_pct_change": -2.4433427762039672,
-            "std_pct_change": 34.07871154380647
+            "mean_pct_change": 2.6912181303116136,
+            "std_pct_change": 26.105928566594123
           },
           "start_hour_entropy": {
-            "recent": 3.5238561897747243,
+            "recent": 3.569702316978284,
             "prior": 3.9738012457359715,
-            "change": -0.44994505596124723,
-            "pct_change": -11.322787128421535
+            "change": -0.4040989287576875,
+            "pct_change": -10.169077509633876
           },
           "drift_summary": {
             "drift_detected": true,
             "threshold": 20.0,
-            "max_pct_change": 26.355752515049634
+            "max_pct_change": 23.788511564307278
           }
         },
         "label_drift": {
           "session_start_rate": {
-            "recent": 3.125,
+            "recent": 3.375,
             "prior": 3.5517241379310347,
-            "pct_change": -12.014563106796123
+            "pct_change": -4.975728155339811
           },
           "days_with_sessions": {
             "recent": 1.1428571428571428,
@@ -545,9 +601,9 @@
               "pct_change": -90.0
             },
             "8": {
-              "recent": 1.0,
+              "recent": 2.0,
               "prior": 6.0,
-              "pct_change": -83.33333333333334
+              "pct_change": -66.66666666666666
             },
             "9": {
               "recent": 4.0,
@@ -565,9 +621,9 @@
               "pct_change": -50.0
             },
             "12": {
-              "recent": 1.0,
+              "recent": 2.0,
               "prior": 4.0,
-              "pct_change": -75.0
+              "pct_change": -50.0
             },
             "13": {
               "recent": 1.0,
@@ -632,261 +688,10 @@
           }
         },
         "overall_drift_detected": true,
-        "detection_date": "2026-10-23T07:07:23.436290"
+        "detection_date": "2026-10-23T12:46:33.670468"
       }
     },
     "history": [
-      {
-        "run_at": "2026-10-20T11:05:26.686247",
-        "num_tracks": 3182,
-        "num_sessions": 797,
-        "mood_model": {
-          "train_accuracy": 0.6356589147286822,
-          "val_accuracy": 0.4742647058823529,
-          "train_f1_macro": 0.5965234365567388,
-          "val_f1_macro": 0.3413888888888889,
-          "train_roc_auc": 0.8083510234106525,
-          "val_roc_auc": 0.6281191156792916,
-          "val_top_k_accuracy": 1.0,
-          "val_top_k_k": 3,
-          "majority_val_accuracy": 0.41911764705882354,
-          "persistence_val_accuracy": 0.5367647058823529,
-          "model_beats_baseline": true
-        },
-        "session_model": {
-          "train_roc_auc": 0.9970188633546934,
-          "val_roc_auc": 0.6521226415094339,
-          "train_accuracy": 0.9628146453089245,
-          "val_accuracy": 0.8649885583524027,
-          "n_features": 13,
-          "n_train": 1748,
-          "n_val": 437,
-          "val_pr_auc": 0.26839934584286235,
-          "val_f1": 0.2891566265060241,
-          "calibration_error": 0.2180081963786895,
-          "baseline_neg_pr_auc": 0.12128146453089245,
-          "baseline_hist_pr_auc": 0.2916361324058372,
-          "model_beats_neg": true,
-          "model_beats_hist": false,
-          "per_hour_metrics": {
-            "morning": {
-              "pr_auc": 0.5054625755971639,
-              "roc_auc": 0.7502316960148285,
-              "n_samples": 109,
-              "n_positive": 26
-            },
-            "afternoon": {
-              "pr_auc": 0.1241337791674666,
-              "roc_auc": 0.36457659987071755,
-              "n_samples": 108,
-              "n_positive": 17
-            },
-            "evening": {
-              "pr_auc": 0.11872900277444483,
-              "roc_auc": 0.3737373737373737,
-              "n_samples": 108,
-              "n_positive": 9
-            },
-            "night": {
-              "pr_auc": 0.041666666666666664,
-              "roc_auc": 0.7927927927927928,
-              "n_samples": 112,
-              "n_positive": 1
-            }
-          },
-          "model_metadata": {
-            "training_date": "2026-10-20T04:51:49.503563",
-            "training_window_start": "2026-07-21T00:00:00",
-            "training_window_end": "2026-10-01T00:00:00",
-            "validation_window_start": "2026-10-01T00:00:00",
-            "validation_window_end": "2026-10-19T00:00:00",
-            "data_hash": "ddb1f7c2",
-            "version_hash": "6e57538b",
-            "rolling_window_days": 90,
-            "model_beats_historical_baseline": false
-          }
-        },
-        "drift": {
-          "feature_drift": {
-            "session_duration": {
-              "recent_mean": 24.595318115942028,
-              "recent_std": 32.135576048236295,
-              "prior_mean": 19.38840172955975,
-              "prior_std": 25.234127473733853,
-              "mean_pct_change": 26.855830918975453,
-              "std_pct_change": 27.349662007082053
-            },
-            "sessions_per_day": {
-              "recent_mean": 2.875,
-              "recent_std": 1.0532687216470449,
-              "prior_mean": 3.6551724137931036,
-              "prior_std": 1.4209239846921735,
-              "mean_pct_change": -21.344339622641513,
-              "std_pct_change": -25.8743794183175
-            },
-            "tracks_per_day": {
-              "recent_mean": 11.25,
-              "recent_std": 9.024272823890023,
-              "prior_mean": 13.0,
-              "prior_std": 7.051534438052081,
-              "mean_pct_change": -13.461538461538462,
-              "std_pct_change": 27.976015761796262
-            },
-            "start_hour_entropy": {
-              "recent": 3.2733494559629492,
-              "prior": 4.050593631404095,
-              "change": -0.7772441754411461,
-              "pct_change": -19.18840165587587
-            },
-            "drift_summary": {
-              "drift_detected": true,
-              "threshold": 20.0,
-              "max_pct_change": 26.855830918975453
-            }
-          },
-          "label_drift": {
-            "session_start_rate": {
-              "recent": 2.875,
-              "prior": 3.6551724137931036,
-              "pct_change": -21.344339622641513
-            },
-            "days_with_sessions": {
-              "recent": 1.1428571428571428,
-              "prior": 0.9666666666666667,
-              "pct_change": 18.226600985221665
-            },
-            "per_hour_frequency": {
-              "0": {
-                "recent": 0.0,
-                "prior": 2.0,
-                "pct_change": -100.0
-              },
-              "1": {
-                "recent": 0.0,
-                "prior": 0.0,
-                "pct_change": 0.0
-              },
-              "2": {
-                "recent": 0.0,
-                "prior": 0.0,
-                "pct_change": 0.0
-              },
-              "3": {
-                "recent": 0.0,
-                "prior": 1.0,
-                "pct_change": -100.0
-              },
-              "4": {
-                "recent": 4.0,
-                "prior": 10.0,
-                "pct_change": -60.0
-              },
-              "5": {
-                "recent": 2.0,
-                "prior": 14.0,
-                "pct_change": -85.71428571428571
-              },
-              "6": {
-                "recent": 2.0,
-                "prior": 12.0,
-                "pct_change": -83.33333333333334
-              },
-              "7": {
-                "recent": 3.0,
-                "prior": 8.0,
-                "pct_change": -62.5
-              },
-              "8": {
-                "recent": 1.0,
-                "prior": 6.0,
-                "pct_change": -83.33333333333334
-              },
-              "9": {
-                "recent": 4.0,
-                "prior": 5.0,
-                "pct_change": -20.0
-              },
-              "10": {
-                "recent": 2.0,
-                "prior": 5.0,
-                "pct_change": -60.0
-              },
-              "11": {
-                "recent": 2.0,
-                "prior": 3.0,
-                "pct_change": -33.33333333333333
-              },
-              "12": {
-                "recent": 0.0,
-                "prior": 4.0,
-                "pct_change": -100.0
-              },
-              "13": {
-                "recent": 1.0,
-                "prior": 7.0,
-                "pct_change": -85.71428571428571
-              },
-              "14": {
-                "recent": 0.0,
-                "prior": 6.0,
-                "pct_change": -100.0
-              },
-              "15": {
-                "recent": 0.0,
-                "prior": 5.0,
-                "pct_change": -100.0
-              },
-              "16": {
-                "recent": 0.0,
-                "prior": 4.0,
-                "pct_change": -100.0
-              },
-              "17": {
-                "recent": 0.0,
-                "prior": 2.0,
-                "pct_change": -100.0
-              },
-              "18": {
-                "recent": 0.0,
-                "prior": 4.0,
-                "pct_change": -100.0
-              },
-              "19": {
-                "recent": 0.0,
-                "prior": 4.0,
-                "pct_change": -100.0
-              },
-              "20": {
-                "recent": 1.0,
-                "prior": 2.0,
-                "pct_change": -50.0
-              },
-              "21": {
-                "recent": 1.0,
-                "prior": 0.0,
-                "pct_change": 0.0
-              },
-              "22": {
-                "recent": 0.0,
-                "prior": 0.0,
-                "pct_change": 0.0
-              },
-              "23": {
-                "recent": 0.0,
-                "prior": 2.0,
-                "pct_change": -100.0
-              }
-            },
-            "drift_summary": {
-              "drift_detected": true,
-              "threshold": 20.0,
-              "max_pct_change": 21.344339622641513
-            }
-          },
-          "overall_drift_detected": true,
-          "detection_date": "2026-10-20T11:05:26.686240"
-        }
-      },
       {
         "run_at": "2026-10-20T22:59:25.522788",
         "num_tracks": 3190,
@@ -3145,52 +2950,303 @@
           "overall_drift_detected": true,
           "detection_date": "2026-10-23T04:50:14.455696"
         }
+      },
+      {
+        "run_at": "2026-10-23T07:07:23.436310",
+        "num_tracks": 3209,
+        "num_sessions": 807,
+        "mood_model": {
+          "train_accuracy": 0.5837755875663382,
+          "val_accuracy": 0.47244094488188976,
+          "train_f1_macro": 0.5200934454219017,
+          "val_f1_macro": 0.32833063957515585,
+          "train_roc_auc": 0.7852123244226968,
+          "val_roc_auc": 0.6147301706328715,
+          "val_top_k_accuracy": 1.0,
+          "val_top_k_k": 3,
+          "majority_val_accuracy": 0.4330708661417323,
+          "persistence_val_accuracy": 0.5354330708661418,
+          "model_beats_baseline": true
+        },
+        "session_model": {
+          "train_roc_auc": 0.9964954463775219,
+          "val_roc_auc": 0.7216283716283717,
+          "train_accuracy": 0.9525171624713958,
+          "val_accuracy": 0.8718535469107551,
+          "n_features": 13,
+          "n_train": 1748,
+          "n_val": 437,
+          "val_pr_auc": 0.3377512325892964,
+          "val_f1": 0.37777777777777777,
+          "calibration_error": 0.25149098444906115,
+          "baseline_neg_pr_auc": 0.11899313501144165,
+          "baseline_hist_pr_auc": 0.32012602259118234,
+          "model_beats_neg": true,
+          "model_beats_hist": true,
+          "per_hour_metrics": {
+            "morning": {
+              "pr_auc": 0.5679648578854465,
+              "roc_auc": 0.830398517145505,
+              "n_samples": 109,
+              "n_positive": 26
+            },
+            "afternoon": {
+              "pr_auc": 0.1382220018910047,
+              "roc_auc": 0.37592592592592594,
+              "n_samples": 108,
+              "n_positive": 18
+            },
+            "evening": {
+              "pr_auc": 0.22303471316806542,
+              "roc_auc": 0.6011315417256011,
+              "n_samples": 108,
+              "n_positive": 7
+            },
+            "night": {
+              "pr_auc": 0.037037037037037035,
+              "roc_auc": 0.7657657657657657,
+              "n_samples": 112,
+              "n_positive": 1
+            }
+          },
+          "model_metadata": {
+            "training_date": "2026-10-23T04:50:14.422576",
+            "training_window_start": "2026-07-24T00:00:00",
+            "training_window_end": "2026-10-04T00:00:00",
+            "validation_window_start": "2026-10-04T00:00:00",
+            "validation_window_end": "2026-10-22T00:00:00",
+            "data_hash": "7af9f94f",
+            "version_hash": "1578a691",
+            "rolling_window_days": 90,
+            "model_beats_historical_baseline": true
+          }
+        },
+        "drift": {
+          "feature_drift": {
+            "session_duration": {
+              "recent_mean": 23.012601333333333,
+              "recent_std": 31.185119275717927,
+              "prior_mean": 18.21254741100324,
+              "prior_std": 23.986364868706296,
+              "mean_pct_change": 26.355752515049634,
+              "std_pct_change": 30.01186068174696
+            },
+            "sessions_per_day": {
+              "recent_mean": 3.125,
+              "recent_std": 2.027159342528357,
+              "prior_mean": 3.5517241379310347,
+              "prior_std": 1.4523751509415646,
+              "mean_pct_change": -12.014563106796123,
+              "std_pct_change": 39.57546307606295
+            },
+            "tracks_per_day": {
+              "recent_mean": 11.875,
+              "recent_std": 9.700998659931873,
+              "prior_mean": 12.172413793103448,
+              "prior_std": 7.235301225849223,
+              "mean_pct_change": -2.4433427762039672,
+              "std_pct_change": 34.07871154380647
+            },
+            "start_hour_entropy": {
+              "recent": 3.5238561897747243,
+              "prior": 3.9738012457359715,
+              "change": -0.44994505596124723,
+              "pct_change": -11.322787128421535
+            },
+            "drift_summary": {
+              "drift_detected": true,
+              "threshold": 20.0,
+              "max_pct_change": 26.355752515049634
+            }
+          },
+          "label_drift": {
+            "session_start_rate": {
+              "recent": 3.125,
+              "prior": 3.5517241379310347,
+              "pct_change": -12.014563106796123
+            },
+            "days_with_sessions": {
+              "recent": 1.1428571428571428,
+              "prior": 0.9666666666666667,
+              "pct_change": 18.226600985221665
+            },
+            "per_hour_frequency": {
+              "0": {
+                "recent": 0.0,
+                "prior": 2.0,
+                "pct_change": -100.0
+              },
+              "1": {
+                "recent": 0.0,
+                "prior": 0.0,
+                "pct_change": 0.0
+              },
+              "2": {
+                "recent": 0.0,
+                "prior": 0.0,
+                "pct_change": 0.0
+              },
+              "3": {
+                "recent": 0.0,
+                "prior": 1.0,
+                "pct_change": -100.0
+              },
+              "4": {
+                "recent": 4.0,
+                "prior": 11.0,
+                "pct_change": -63.63636363636363
+              },
+              "5": {
+                "recent": 4.0,
+                "prior": 12.0,
+                "pct_change": -66.66666666666666
+              },
+              "6": {
+                "recent": 0.0,
+                "prior": 13.0,
+                "pct_change": -100.0
+              },
+              "7": {
+                "recent": 1.0,
+                "prior": 10.0,
+                "pct_change": -90.0
+              },
+              "8": {
+                "recent": 1.0,
+                "prior": 6.0,
+                "pct_change": -83.33333333333334
+              },
+              "9": {
+                "recent": 4.0,
+                "prior": 5.0,
+                "pct_change": -20.0
+              },
+              "10": {
+                "recent": 1.0,
+                "prior": 5.0,
+                "pct_change": -80.0
+              },
+              "11": {
+                "recent": 2.0,
+                "prior": 4.0,
+                "pct_change": -50.0
+              },
+              "12": {
+                "recent": 1.0,
+                "prior": 4.0,
+                "pct_change": -75.0
+              },
+              "13": {
+                "recent": 1.0,
+                "prior": 7.0,
+                "pct_change": -85.71428571428571
+              },
+              "14": {
+                "recent": 1.0,
+                "prior": 6.0,
+                "pct_change": -83.33333333333334
+              },
+              "15": {
+                "recent": 1.0,
+                "prior": 5.0,
+                "pct_change": -80.0
+              },
+              "16": {
+                "recent": 1.0,
+                "prior": 3.0,
+                "pct_change": -66.66666666666666
+              },
+              "17": {
+                "recent": 0.0,
+                "prior": 1.0,
+                "pct_change": -100.0
+              },
+              "18": {
+                "recent": 0.0,
+                "prior": 3.0,
+                "pct_change": -100.0
+              },
+              "19": {
+                "recent": 0.0,
+                "prior": 2.0,
+                "pct_change": -100.0
+              },
+              "20": {
+                "recent": 2.0,
+                "prior": 1.0,
+                "pct_change": 100.0
+              },
+              "21": {
+                "recent": 1.0,
+                "prior": 0.0,
+                "pct_change": 0.0
+              },
+              "22": {
+                "recent": 0.0,
+                "prior": 0.0,
+                "pct_change": 0.0
+              },
+              "23": {
+                "recent": 0.0,
+                "prior": 2.0,
+                "pct_change": -100.0
+              }
+            },
+            "drift_summary": {
+              "drift_detected": false,
+              "threshold": 20.0,
+              "max_pct_change": 18.226600985221665
+            }
+          },
+          "overall_drift_detected": true,
+          "detection_date": "2026-10-23T07:07:23.436290"
+        }
       }
     ]
   },
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 22.54504135802469,
-        "recent_std": 30.128804005609375,
+        "recent_mean": 26.656992261904758,
+        "recent_std": 36.494453810614964,
         "prior_mean": 18.21254741100324,
         "prior_std": 23.986364868706296,
-        "mean_pct_change": 23.788511564307278,
-        "std_pct_change": 25.608045114484124
+        "mean_pct_change": 46.366083010440086,
+        "std_pct_change": 52.14666336634981
       },
       "sessions_per_day": {
-        "recent_mean": 3.375,
-        "recent_std": 1.8666480653835098,
+        "recent_mean": 3.5,
+        "recent_std": 1.8708286933869707,
         "prior_mean": 3.5517241379310347,
         "prior_std": 1.4523751509415646,
-        "mean_pct_change": -4.975728155339811,
-        "std_pct_change": 28.52382279973429
+        "mean_pct_change": -1.4563106796116565,
+        "std_pct_change": 28.811670467793782
       },
       "tracks_per_day": {
-        "recent_mean": 12.5,
-        "recent_std": 9.12414379544733,
+        "recent_mean": 15.875,
+        "recent_std": 10.913724158141436,
         "prior_mean": 12.172413793103448,
         "prior_std": 7.235301225849223,
-        "mean_pct_change": 2.6912181303116136,
-        "std_pct_change": 26.105928566594123
+        "mean_pct_change": 30.417847025495746,
+        "std_pct_change": 50.83994180021813
       },
       "start_hour_entropy": {
-        "recent": 3.569702316978284,
+        "recent": 3.5930692077718906,
         "prior": 3.9738012457359715,
-        "change": -0.4040989287576875,
-        "pct_change": -10.169077509633876
+        "change": -0.38073203796408084,
+        "pct_change": -9.58105386807203
       },
       "drift_summary": {
         "drift_detected": true,
         "threshold": 20.0,
-        "max_pct_change": 23.788511564307278
+        "max_pct_change": 46.366083010440086
       }
     },
     "label_drift": {
       "session_start_rate": {
-        "recent": 3.375,
+        "recent": 3.5,
         "prior": 3.5517241379310347,
-        "pct_change": -4.975728155339811
+        "pct_change": -1.4563106796116565
       },
       "days_with_sessions": {
         "recent": 1.1428571428571428,
@@ -3264,9 +3320,9 @@
           "pct_change": -50.0
         },
         "13": {
-          "recent": 1.0,
+          "recent": 2.0,
           "prior": 7.0,
-          "pct_change": -85.71428571428571
+          "pct_change": -71.42857142857143
         },
         "14": {
           "recent": 1.0,
@@ -3326,6 +3382,6 @@
       }
     },
     "overall_drift_detected": true,
-    "detection_date": "2026-10-23T12:46:33.533024"
+    "detection_date": "2026-10-23T17:46:09.515348"
   }
 }
