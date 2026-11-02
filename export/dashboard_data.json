@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-11-02T06:02:20.402368",
+  "generated_at": "2026-11-02T13:14:16.523241",
   "next_prediction": {
-    "mood_cluster_id": 1,
-    "mood_label": "High energy, positive",
-    "confidence": 0.4230803014040427,
+    "mood_cluster_id": 0,
+    "mood_label": "High energy, negative",
+    "confidence": 0.346547055451053,
     "cluster_centroid": {
-      "valence": 0.6690514240506328,
-      "energy": 0.7509272151898735,
-      "danceability": 0.6184667721518987,
-      "acousticness": 0.08507897001582224,
-      "instrumentalness": 0.05841384666930371,
-      "tempo_norm": 0.5106050253164557
+      "valence": 0.2600769423558901,
+      "energy": 0.6034970760233919,
+      "danceability": 0.488514619883041,
+      "acousticness": 0.11382174143692558,
+      "instrumentalness": 0.14031437332497906,
+      "tempo_norm": 0.460259485380117
     },
     "model_version": "fcfb41a0",
     "prediction_source": "model",
@@ -18,40 +18,46 @@
     "validation_reliability": 0.5232974910394266,
     "validation_log_loss": 0.9855995500568205,
     "predictability": "low",
-    "normalized_entropy": 0.9830784033163318,
+    "normalized_entropy": 0.9996360859925865,
     "abstained": true,
     "context_level": null,
-    "switch_probability": 0.7296286681932589,
+    "switch_probability": 0.675032040533012,
     "recent_window_size": 3,
     "mood_distribution": [
       {
-        "mood_cluster_id": 1,
-        "mood_label": "High energy, positive",
-        "probability": 0.4230803014040427
-      },
-      {
         "mood_cluster_id": 0,
         "mood_label": "High energy, negative",
-        "probability": 0.30654836678921626
+        "probability": 0.346547055451053
+      },
+      {
+        "mood_cluster_id": 1,
+        "mood_label": "High energy, positive",
+        "probability": 0.328484985081959
       },
       {
         "mood_cluster_id": 2,
         "mood_label": "Medium energy, negative, acoustic",
-        "probability": 0.270371331806741
+        "probability": 0.3249679594669879
       }
     ],
     "recommended_tracks": [
       {
-        "track_id": "3C0nOe05EIt1390bVABLyN",
-        "track_name": "On The Floor",
-        "artist_name": "Jennifer Lopez, Pitbull",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e02d7b2aa3834b82b1cbe899a48"
+        "track_id": "6G0ldVNlhQf82Rf3pWjAyQ",
+        "track_name": "Pegasus",
+        "artist_name": "MEDUZA, Eli & Fur",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02133df10c89c82bfd1178fc46"
       },
       {
-        "track_id": "25MzUGleMnmyoeTNRZ8QF1",
-        "track_name": "VAPO NO SETOR",
-        "artist_name": "DJ ANXVAR, MC LONE",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e020903f62c6c2287295954f704"
+        "track_id": "1fVQmMgrOUnrh8KgndKGzP",
+        "track_name": "Roman d'Amour",
+        "artist_name": "Alastair Lane, Sarah Degny",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e0274003464dc94616ea78c75db"
+      },
+      {
+        "track_id": "0e42FrN75U6RuIzBTqszKz",
+        "track_name": "Stereo Love",
+        "artist_name": "DJ Zaro",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02bbfd604e3eb005d48ba772f9"
       }
     ]
   },
@@ -65,27 +71,23 @@
     "6": 0.009736196137964725,
     "7": 0.31372395157814026,
     "8": 0.31025800108909607,
-    "9": 0.44517409801483154,
-    "10": 0.13452155888080597,
-    "11": 0.12738096714019775,
-    "12": 0.08193981647491455,
-    "13": 0.13116440176963806,
-    "14": 0.11424101144075394,
-    "15": 0.15975984930992126,
-    "16": 0.10377592593431473,
-    "17": 0.1305423527956009,
-    "18": 0.06782777607440948,
-    "19": 0.0824330747127533,
-    "20": 0.020861299708485603,
-    "21": 0.08869542926549911,
-    "22": 0.025263065472245216,
-    "23": 0.23841212689876556
+    "9": 0.07196495682001114,
+    "10": 0.014534849673509598,
+    "11": 0.00957507360726595,
+    "12": 0.009916122071444988,
+    "13": 0.012692078948020935,
+    "14": 0.014502258040010929,
+    "15": 0.019169192761182785,
+    "16": 0.023962825536727905,
+    "17": 0.07434207201004028,
+    "18": 0.05852420628070831,
+    "19": 0.04195370897650719,
+    "20": 0.0036240005865693092,
+    "21": 0.029756680130958557,
+    "22": 0.008100884035229683,
+    "23": 0.027543090283870697
   },
   "top_hours": [
-    {
-      "hour": 9,
-      "probability": 0.44517409801483154
-    },
     {
       "hour": 7,
       "probability": 0.31372395157814026
@@ -93,33 +95,37 @@
     {
       "hour": 8,
       "probability": 0.31025800108909607
+    },
+    {
+      "hour": 17,
+      "probability": 0.07434207201004028
     }
   ],
   "session_actual": {
-    "0": 0.37662337662337664,
-    "1": 0.18181818181818182,
-    "2": 0.15584415584415584,
-    "3": 0.07792207792207792,
-    "4": 0.06493506493506493,
-    "5": 0.18181818181818182,
-    "6": 0.42857142857142855,
-    "7": 0.961038961038961,
+    "0": 0.3717948717948718,
+    "1": 0.1794871794871795,
+    "2": 0.15384615384615385,
+    "3": 0.07692307692307693,
+    "4": 0.0641025641025641,
+    "5": 0.1794871794871795,
+    "6": 0.4230769230769231,
+    "7": 0.9487179487179487,
     "8": 1.0,
-    "9": 0.7922077922077922,
-    "10": 0.8181818181818182,
-    "11": 0.5974025974025974,
-    "12": 0.44155844155844154,
-    "13": 0.42857142857142855,
-    "14": 0.5064935064935064,
-    "15": 0.4025974025974026,
-    "16": 0.5844155844155844,
-    "17": 0.7012987012987013,
-    "18": 0.4805194805194805,
-    "19": 0.5324675324675324,
-    "20": 0.3116883116883117,
-    "21": 0.3246753246753247,
-    "22": 0.2597402597402597,
-    "23": 0.3246753246753247
+    "9": 0.7948717948717948,
+    "10": 0.8205128205128205,
+    "11": 0.5897435897435898,
+    "12": 0.4358974358974359,
+    "13": 0.4230769230769231,
+    "14": 0.5,
+    "15": 0.3974358974358974,
+    "16": 0.5769230769230769,
+    "17": 0.6923076923076923,
+    "18": 0.47435897435897434,
+    "19": 0.5256410256410257,
+    "20": 0.3076923076923077,
+    "21": 0.32051282051282054,
+    "22": 0.2564102564102564,
+    "23": 0.32051282051282054
   },
   "mood_clusters": [
     {
@@ -161,47 +167,120 @@
   ],
   "mood_trajectory": [
     {
-      "time": "2026-11-01T09:00:00+00:00",
-      "valence": 0.282,
-      "energy": 0.613
+      "time": "2026-11-02T05:15:00+00:00",
+      "valence": 0.266,
+      "energy": 0.569
     },
     {
-      "time": "2026-11-01T09:45:00+00:00",
-      "valence": 0.22866666666666666,
-      "energy": 0.4543333333333333
+      "time": "2026-11-02T06:15:00+00:00",
+      "valence": 0.6225,
+      "energy": 0.5455
     },
     {
-      "time": "2026-11-01T10:00:00+00:00",
-      "valence": 0.807,
-      "energy": 0.832
+      "time": "2026-11-02T06:30:00+00:00",
+      "valence": 0.313,
+      "energy": 0.404
     },
     {
-      "time": "2026-11-01T10:15:00+00:00",
-      "valence": 0.718,
-      "energy": 0.84
+      "time": "2026-11-02T07:45:00+00:00",
+      "valence": 0.314,
+      "energy": 0.7543333333333333
     },
     {
-      "time": "2026-11-01T11:30:00+00:00",
-      "valence": 0.659,
-      "energy": 0.717
-    },
-    {
-      "time": "2026-11-01T11:45:00+00:00",
-      "valence": 0.19266666666666668,
-      "energy": 0.32576666666666665
-    },
-    {
-      "time": "2026-11-01T12:00:00+00:00",
-      "valence": 0.18,
-      "energy": 0.608
-    },
-    {
-      "time": "2026-11-01T12:15:00+00:00",
-      "valence": 0.643,
-      "energy": 0.136
+      "time": "2026-11-02T08:00:00+00:00",
+      "valence": 0.3305,
+      "energy": 0.5205
     }
   ],
   "recently_played": [
+    {
+      "track_id": "1JbbYSre3n6j2YlfHH31UL",
+      "track_name": "Fear",
+      "artist_name": "Current Joys",
+      "played_at": "2026-11-02T08:11:03.490000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02df7a61e9fdf9fec7df7bd72a",
+      "mood_cluster_id": 2
+    },
+    {
+      "track_id": "7CiDwKE62N6ey3LyG6s7xc",
+      "track_name": "In My Room",
+      "artist_name": "Chance Pe\u00f1a",
+      "played_at": "2026-11-02T08:06:49.164000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e0298e1b4a825e7fc7bb9526214",
+      "mood_cluster_id": 2
+    },
+    {
+      "track_id": "0yuAWlxq59xT3agQ965OxE",
+      "track_name": "Sunsetz",
+      "artist_name": "Cigarettes After Sex",
+      "played_at": "2026-11-02T08:03:39.156000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02dfed999f959177dfc4f33cdc",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "0UV5zxRMz6AO4ZwUOZNIKI",
+      "track_name": "Where'd All the Time Go?",
+      "artist_name": "Dr. Dog",
+      "played_at": "2026-11-02T08:00:10.393000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e020478062bc04df0947d232fcb",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "2K7xn816oNHJZ0aVqdQsha",
+      "track_name": "Softcore",
+      "artist_name": "The Neighbourhood",
+      "played_at": "2026-11-02T07:55:36.671000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e029b6ac98a52f62d5cb473da40",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "5Az8KU81g2aLBbJN67F2CI",
+      "track_name": "Mind Over Matter",
+      "artist_name": "Young the Giant",
+      "played_at": "2026-11-02T07:52:16.492000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e025d1a1b0e0f3e0fc586393092",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "5S8jc9sCle880PjbwnEzsY",
+      "track_name": "Aoi, Koi, Daidaiiro No Hi",
+      "artist_name": "MASS OF THE FERMENTING DREGS",
+      "played_at": "2026-11-02T07:47:43.486000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e025f2ca3e8b93fd5bc304480f5",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "2xGjfbXZnI8uQDhukoQURQ",
+      "track_name": "K.",
+      "artist_name": "Cigarettes After Sex",
+      "played_at": "2026-11-02T06:35:22.701000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02dfed999f959177dfc4f33cdc",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "5Yx9t9RgATAtYoHN8gbRM0",
+      "track_name": "Fool",
+      "artist_name": "Frankie Cosmos",
+      "played_at": "2026-11-02T06:22:46.939000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02c74554207eff9893c4cf5fc2",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "6cMMZ2pdP4PkYsVJqX2WUh",
+      "track_name": "Kids",
+      "artist_name": "Current Joys",
+      "played_at": "2026-11-02T06:20:49.030000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e020df6a00937f62abc0e73c0ab",
+      "mood_cluster_id": 1
+    },
+    {
+      "track_id": "5v8aEcHcaJIGYpfVVPtJjI",
+      "track_name": "Wires",
+      "artist_name": "The Neighbourhood",
+      "played_at": "2026-11-02T05:25:46.751000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02ee14a6d816e596e176575962",
+      "mood_cluster_id": 0
+    },
     {
       "track_id": "7EAMXbLcL0qXmciM5SwMh2",
       "track_name": "Heart To Heart",
@@ -313,94 +392,6 @@
       "played_at": "2026-10-31T21:43:15.167000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e024ea9ba86cd9506a004bab042",
       "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0TFTAtCYhp2tQ9KcJIZb55",
-      "track_name": "undressed",
-      "artist_name": "sombr",
-      "played_at": "2026-10-31T21:37:23.864000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024229702de91cb3d3a4383302",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "4WFgvKVfEhb3IUAFGrutTR",
-      "track_name": "Love Me Not",
-      "artist_name": "Ravyn Lenae",
-      "played_at": "2026-10-31T21:34:27.798000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e020e62daaea2c7b94053e1c142",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "2fuYa3Lx06QQJAm0MjztKr",
-      "track_name": "Let Down",
-      "artist_name": "Radiohead",
-      "played_at": "2026-10-31T21:31:00.317000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02c8b444df094279e70d0ed856",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0t1fdMrn7JOg9DDsT95bxt",
-      "track_name": "we never dated",
-      "artist_name": "sombr",
-      "played_at": "2026-10-31T21:26:06.758000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024229702de91cb3d3a4383302",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "1NXbNEAcPvY5G1xvfN57aA",
-      "track_name": "Dracula",
-      "artist_name": "Tame Impala",
-      "played_at": "2026-10-31T21:18:22.849000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02208500450dcd0fd294d7bd3b",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "7qjZnBKE73H4Oxkopwulqe",
-      "track_name": "back to friends",
-      "artist_name": "sombr",
-      "played_at": "2026-10-31T21:15:01.005000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024229702de91cb3d3a4383302",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "0InIeZW4P6VO7dUGRM4AKH",
-      "track_name": "Sienna",
-      "artist_name": "The Mar\u00edas",
-      "played_at": "2026-10-31T21:11:47.994000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e028aa339341a0b0c813909c831",
-      "mood_cluster_id": 2
-    },
-    {
-      "track_id": "2x8evxqUlF0eRabbW2JBJd",
-      "track_name": "Fluorescent Adolescent",
-      "artist_name": "Arctic Monkeys",
-      "played_at": "2026-10-31T13:35:06.728000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02b1f8da74f225fa1225cdface",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "0BxE4FqsDD1Ot4YuBXwAPp",
-      "track_name": "505",
-      "artist_name": "Arctic Monkeys",
-      "played_at": "2026-10-31T13:01:10.766000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02b1f8da74f225fa1225cdface",
-      "mood_cluster_id": 0
-    },
-    {
-      "track_id": "3oEkrIfXfSh9zGnE7eBzSV",
-      "track_name": "The Winner Takes It All",
-      "artist_name": "ABBA",
-      "played_at": "2026-10-31T12:57:03.171000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e024d08fc99eff4ed52dfce91fa",
-      "mood_cluster_id": 2
-    },
-    {
-      "track_id": "5ruzrDWcT0vuJIOMW7gMnW",
-      "track_name": "The Adults Are Talking",
-      "artist_name": "The Strokes",
-      "played_at": "2026-10-30T06:10:24.265000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02e3f1ba3de4659708c25d0f39",
-      "mood_cluster_id": 1
     }
   ],
   "metrics": {
@@ -3171,46 +3162,46 @@
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 20.515819753086422,
-        "recent_std": 24.78287239554672,
-        "prior_mean": 20.065892333333338,
-        "prior_std": 29.108398235169123,
-        "mean_pct_change": 2.2422497453834525,
-        "std_pct_change": -14.860061363308722
+        "recent_mean": 21.059447530864198,
+        "recent_std": 24.69029105156023,
+        "prior_mean": 20.50308787878788,
+        "prior_std": 29.06740815276727,
+        "mean_pct_change": 2.713540786468152,
+        "std_pct_change": -15.058504969561007
       },
       "sessions_per_day": {
         "recent_mean": 3.375,
         "recent_std": 1.4947825928876748,
-        "prior_mean": 3.4482758620689653,
-        "prior_std": 1.6522963518221985,
-        "mean_pct_change": -2.124999999999994,
-        "std_pct_change": -9.53302104436732
+        "prior_mean": 3.413793103448276,
+        "prior_std": 1.650856441873907,
+        "mean_pct_change": -1.1363636363636347,
+        "std_pct_change": -9.454113939130334
       },
       "tracks_per_day": {
-        "recent_mean": 12.125,
-        "recent_std": 6.641488914392616,
-        "prior_mean": 12.862068965517242,
-        "prior_std": 8.97400129082103,
-        "mean_pct_change": -5.730563002680969,
-        "std_pct_change": -25.99188813148715
+        "recent_mean": 12.875,
+        "recent_std": 6.112231589198825,
+        "prior_mean": 12.827586206896552,
+        "prior_std": 9.00217968056565,
+        "mean_pct_change": 0.36962365591397944,
+        "std_pct_change": -32.10275948619186
       },
       "start_hour_entropy": {
         "recent": 3.856196298219379,
-        "prior": 3.9910914087320304,
-        "change": -0.13489511051265124,
-        "pct_change": -3.379905311552546
+        "prior": 3.9019719787634872,
+        "change": -0.04577568054410808,
+        "pct_change": -1.1731422161215552
       },
       "drift_summary": {
         "drift_detected": false,
         "threshold": 20.0,
-        "max_pct_change": 5.730563002680969
+        "max_pct_change": 2.713540786468152
       }
     },
     "label_drift": {
       "session_start_rate": {
         "recent": 3.375,
-        "prior": 3.4482758620689653,
-        "pct_change": -2.124999999999994
+        "prior": 3.413793103448276,
+        "pct_change": -1.1363636363636347
       },
       "days_with_sessions": {
         "recent": 1.1428571428571428,
@@ -3220,8 +3211,8 @@
       "per_hour_frequency": {
         "0": {
           "recent": 0.0,
-          "prior": 1.0,
-          "pct_change": -100.0
+          "prior": 0.0,
+          "pct_change": 0.0
         },
         "1": {
           "recent": 0.0,
@@ -3244,33 +3235,33 @@
           "pct_change": -91.66666666666666
         },
         "5": {
-          "recent": 2.0,
+          "recent": 3.0,
           "prior": 11.0,
-          "pct_change": -81.81818181818183
+          "pct_change": -72.72727272727273
         },
         "6": {
           "recent": 3.0,
-          "prior": 10.0,
-          "pct_change": -70.0
+          "prior": 11.0,
+          "pct_change": -72.72727272727273
         },
         "7": {
-          "recent": 0.0,
-          "prior": 10.0,
-          "pct_change": -100.0
+          "recent": 1.0,
+          "prior": 9.0,
+          "pct_change": -88.88888888888889
         },
         "8": {
-          "recent": 1.0,
-          "prior": 6.0,
-          "pct_change": -83.33333333333334
+          "recent": 0.0,
+          "prior": 7.0,
+          "pct_change": -100.0
         },
         "9": {
-          "recent": 3.0,
-          "prior": 7.0,
-          "pct_change": -57.14285714285714
+          "recent": 2.0,
+          "prior": 8.0,
+          "pct_change": -75.0
         },
         "10": {
           "recent": 0.0,
-          "prior": 6.0,
+          "prior": 5.0,
           "pct_change": -100.0
         },
         "11": {
@@ -3335,8 +3326,8 @@
         },
         "23": {
           "recent": 0.0,
-          "prior": 1.0,
-          "pct_change": -100.0
+          "prior": 0.0,
+          "pct_change": 0.0
         }
       },
       "drift_summary": {
@@ -3346,6 +3337,6 @@
       }
     },
     "overall_drift_detected": false,
-    "detection_date": "2026-11-02T06:02:20.393160"
+    "detection_date": "2026-11-02T13:14:16.452018"
   }
 }
