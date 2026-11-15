@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-11-15T06:32:54.360582",
+  "generated_at": "2026-11-15T15:27:25.173807",
   "next_prediction": {
-    "mood_cluster_id": 1,
-    "mood_label": "High energy, positive",
-    "confidence": 0.5062330247341205,
+    "mood_cluster_id": 2,
+    "mood_label": "Medium energy, negative, acoustic",
+    "confidence": 0.48531742059399846,
     "cluster_centroid": {
-      "valence": 0.6668631123919309,
-      "energy": 0.7566520172910665,
-      "danceability": 0.6194474063400578,
-      "acousticness": 0.07966912149135438,
-      "instrumentalness": 0.05963627042507193,
-      "tempo_norm": 0.510379340057637
+      "valence": 0.3251357298474945,
+      "energy": 0.40858333333333324,
+      "danceability": 0.5062740740740741,
+      "acousticness": 0.7045294117647063,
+      "instrumentalness": 0.12408704944444443,
+      "tempo_norm": 0.4838144575163399
     },
     "model_version": "1f1bb019",
     "prediction_source": "two_stage_model",
@@ -18,46 +18,40 @@
     "validation_reliability": 0.5952380952380952,
     "validation_log_loss": 0.9419085629259003,
     "predictability": "low",
-    "normalized_entropy": 0.9379427247327383,
+    "normalized_entropy": 0.9544659233005742,
     "abstained": true,
     "context_level": null,
-    "switch_probability": 0.4937669752658796,
+    "switch_probability": 0.5146825794060016,
     "recent_window_size": 3,
     "mood_distribution": [
       {
+        "mood_cluster_id": 2,
+        "mood_label": "Medium energy, negative, acoustic",
+        "probability": 0.48531742059399846
+      },
+      {
         "mood_cluster_id": 1,
         "mood_label": "High energy, positive",
-        "probability": 0.5062330247341205
+        "probability": 0.27237490470079034
       },
       {
         "mood_cluster_id": 0,
         "mood_label": "High energy, negative",
-        "probability": 0.2815619792979762
-      },
-      {
-        "mood_cluster_id": 2,
-        "mood_label": "Medium energy, negative, acoustic",
-        "probability": 0.21220499596790338
+        "probability": 0.24230767470521128
       }
     ],
     "recommended_tracks": [
       {
-        "track_id": "412luShbmlgqqgYFStIB1s",
-        "track_name": "Wish You Were Mine - Radio Edit",
-        "artist_name": "Philip George",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e0225f92c1a22808b250fc1b1cb"
+        "track_id": "3A9A7mfVDVm3rrS9SMGhg5",
+        "track_name": "H\u01b0 kh\u00f4ng",
+        "artist_name": "Kha",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e0276f94c58182c9584e85d34c6"
       },
       {
-        "track_id": "6ED7qim1NAX1HjNU8039WS",
-        "track_name": "Alucin",
-        "artist_name": "Eugenio Esquivel, Grupo Marca Registrada, Sebastian Esquivel, Los Esquivel",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e02086a84a764dc341262487967"
-      },
-      {
-        "track_id": "52LJ3hyknOijCrE5gCD0rE",
-        "track_name": "L'Amour Toujours",
-        "artist_name": "GIGI D'AGOSTINO",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e0295c70cc04573417548b47199"
+        "track_id": "5Hi7mKvhNYvk4PIURtuY42",
+        "track_name": "Joni (feat. Don Toliver)",
+        "artist_name": "SZA, Don Toliver",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e025623d454ad0ffa8d0ebfd4ad"
       }
     ]
   },
@@ -115,10 +109,10 @@
     "10": 0.8536585365853658,
     "11": 0.5609756097560976,
     "12": 0.4878048780487805,
-    "13": 0.4146341463414634,
+    "13": 0.4268292682926829,
     "14": 0.5121951219512195,
     "15": 0.4024390243902439,
-    "16": 0.573170731707317,
+    "16": 0.5853658536585366,
     "17": 0.6707317073170732,
     "18": 0.47560975609756095,
     "19": 0.5487804878048781,
@@ -167,47 +161,49 @@
   ],
   "mood_trajectory": [
     {
-      "time": "2026-11-14T07:45:00+00:00",
-      "valence": 0.373,
-      "energy": 0.669
+      "time": "2026-11-15T10:45:00+00:00",
+      "valence": 0.567,
+      "energy": 0.822
     },
     {
-      "time": "2026-11-14T09:30:00+00:00",
-      "valence": 0.503625,
-      "energy": 0.683
-    },
-    {
-      "time": "2026-11-14T09:45:00+00:00",
-      "valence": 0.45020000000000004,
-      "energy": 0.851
-    },
-    {
-      "time": "2026-11-14T10:00:00+00:00",
-      "valence": 0.4595,
-      "energy": 0.8240000000000001
-    },
-    {
-      "time": "2026-11-14T10:15:00+00:00",
-      "valence": 0.806,
-      "energy": 0.872
-    },
-    {
-      "time": "2026-11-14T10:30:00+00:00",
-      "valence": 0.661,
-      "energy": 0.94
-    },
-    {
-      "time": "2026-11-14T11:00:00+00:00",
-      "valence": 0.733,
-      "energy": 0.7795000000000001
-    },
-    {
-      "time": "2026-11-14T11:15:00+00:00",
-      "valence": 0.883,
-      "energy": 0.959
+      "time": "2026-11-15T13:30:00+00:00",
+      "valence": 0.25233333333333335,
+      "energy": 0.6536666666666667
     }
   ],
   "recently_played": [
+    {
+      "track_id": "3oEkrIfXfSh9zGnE7eBzSV",
+      "track_name": "The Winner Takes It All",
+      "artist_name": "ABBA",
+      "played_at": "2026-11-15T13:43:58.409000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e024d08fc99eff4ed52dfce91fa",
+      "mood_cluster_id": 2
+    },
+    {
+      "track_id": "40gvh6jP5qxMJuMmF9lG9A",
+      "track_name": "Baby Came Home 2 / Valentines",
+      "artist_name": "The Neighbourhood",
+      "played_at": "2026-11-15T13:39:09.612000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e025260c62db020e5861a51556d",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "7ghKr0pCYyPPyp7t1FH8k4",
+      "track_name": "Les",
+      "artist_name": "Childish Gambino",
+      "played_at": "2026-11-15T13:32:45.207000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e026182cfe2e2a090d125c81dc0",
+      "mood_cluster_id": 0
+    },
+    {
+      "track_id": "3jjsRKEsF42ccXf8kWR3nu",
+      "track_name": "Washing Machine Heart",
+      "artist_name": "Mitski",
+      "played_at": "2026-11-15T10:50:20.080000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02c428f67b4a9b7e1114dfc117",
+      "mood_cluster_id": 1
+    },
     {
       "track_id": "3mPAhyYswPqr9dCTAdCqyV",
       "track_name": "1-800",
@@ -375,38 +371,6 @@
       "played_at": "2026-11-13T16:28:55.334000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e023cf1c1dbcfa3f1ab7282719b",
       "mood_cluster_id": 1
-    },
-    {
-      "track_id": "1mh9eHVRdNhzryG43PXdW1",
-      "track_name": "MUTT",
-      "artist_name": "Leon Thomas",
-      "played_at": "2026-11-13T10:15:16.132000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e0282a5b97ffaf87e21ce6fdf4a",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "63Pi2NAx5yCgeLhCTOrEou",
-      "track_name": "Headlock",
-      "artist_name": "Imogen Heap",
-      "played_at": "2026-11-13T09:52:19.352000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e0296623f4784c88259592fb8a1",
-      "mood_cluster_id": 2
-    },
-    {
-      "track_id": "7FKLbfLP8JK1MXKRrYx4Kd",
-      "track_name": "i like the way you kiss me - burnt",
-      "artist_name": "Artemas",
-      "played_at": "2026-11-13T09:48:49.974000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02545b91b453024f4be8c72da0",
-      "mood_cluster_id": 1
-    },
-    {
-      "track_id": "7zwn1eykZtZ5LODrf7c0tS",
-      "track_name": "You Get Me So High",
-      "artist_name": "The Neighbourhood",
-      "played_at": "2026-11-13T09:46:13.648000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e029b6ac98a52f62d5cb473da40",
-      "mood_cluster_id": 0
     }
   ],
   "metrics": {
@@ -3177,46 +3141,46 @@
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 35.6366731884058,
-        "recent_std": 44.16368663958997,
-        "prior_mean": 21.99068215488216,
-        "prior_std": 28.82274682701639,
-        "mean_pct_change": 62.053514017499865,
-        "std_pct_change": 53.225113847213464
+        "recent_mean": 32.778988194444445,
+        "recent_std": 43.9968227703616,
+        "prior_mean": 22.24343922558923,
+        "prior_std": 28.906279035212336,
+        "mean_pct_change": 47.36474814890558,
+        "std_pct_change": 52.20507183496926
       },
       "sessions_per_day": {
-        "recent_mean": 2.875,
-        "recent_std": 1.0532687216470449,
+        "recent_mean": 3.0,
+        "recent_std": 0.8660254037844386,
         "prior_mean": 3.413793103448276,
         "prior_std": 1.6085384537504277,
-        "mean_pct_change": -15.782828282828282,
-        "std_pct_change": -34.5201403677189
+        "mean_pct_change": -12.12121212121212,
+        "std_pct_change": -46.16072735064334
       },
       "tracks_per_day": {
-        "recent_mean": 16.125,
-        "recent_std": 7.149082108914403,
-        "prior_mean": 13.413793103448276,
-        "prior_std": 8.771101615156486,
-        "mean_pct_change": 20.2120822622108,
-        "std_pct_change": -18.492768382015196
+        "recent_mean": 15.875,
+        "recent_std": 7.523920188306094,
+        "prior_mean": 13.551724137931034,
+        "prior_std": 8.620689655172413,
+        "mean_pct_change": 17.143765903307894,
+        "std_pct_change": -12.722525815649302
       },
       "start_hour_entropy": {
-        "recent": 3.174885868724236,
-        "prior": 3.9542970386782947,
-        "change": -0.7794111699540589,
-        "pct_change": -19.71048614533453
+        "recent": 3.323934896284057,
+        "prior": 3.935103760598596,
+        "change": -0.6111688643145388,
+        "pct_change": -15.531200738187643
       },
       "drift_summary": {
         "drift_detected": true,
         "threshold": 20.0,
-        "max_pct_change": 62.053514017499865
+        "max_pct_change": 47.36474814890558
       }
     },
     "label_drift": {
       "session_start_rate": {
-        "recent": 2.875,
+        "recent": 3.0,
         "prior": 3.413793103448276,
-        "pct_change": -15.782828282828282
+        "pct_change": -12.12121212121212
       },
       "days_with_sessions": {
         "recent": 1.1428571428571428,
@@ -3275,14 +3239,14 @@
           "pct_change": -55.55555555555556
         },
         "10": {
-          "recent": 1.0,
+          "recent": 2.0,
           "prior": 3.0,
-          "pct_change": -66.66666666666666
+          "pct_change": -33.33333333333333
         },
         "11": {
-          "recent": 3.0,
-          "prior": 5.0,
-          "pct_change": -40.0
+          "recent": 2.0,
+          "prior": 6.0,
+          "pct_change": -66.66666666666666
         },
         "12": {
           "recent": 2.0,
@@ -3290,9 +3254,9 @@
           "pct_change": -33.33333333333333
         },
         "13": {
-          "recent": 0.0,
+          "recent": 1.0,
           "prior": 7.0,
-          "pct_change": -100.0
+          "pct_change": -85.71428571428571
         },
         "14": {
           "recent": 1.0,
@@ -3321,7 +3285,7 @@
         },
         "19": {
           "recent": 0.0,
-          "prior": 2.0,
+          "prior": 1.0,
           "pct_change": -100.0
         },
         "20": {
@@ -3352,6 +3316,6 @@
       }
     },
     "overall_drift_detected": true,
-    "detection_date": "2026-11-15T06:32:54.343461"
+    "detection_date": "2026-11-15T15:27:25.157547"
   }
 }
