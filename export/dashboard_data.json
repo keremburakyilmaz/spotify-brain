@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-11-24T09:55:18.540644",
+  "generated_at": "2026-11-24T15:09:06.723148",
   "next_prediction": {
     "mood_cluster_id": 0,
     "mood_label": "High energy, negative",
-    "confidence": 0.4903796246238694,
+    "confidence": 0.48445251583959414,
     "cluster_centroid": {
       "valence": 0.26004158339738637,
       "energy": 0.6068493466564182,
@@ -18,40 +18,40 @@
     "validation_reliability": 0.5933147632311978,
     "validation_log_loss": 0.9312806562416795,
     "predictability": "low",
-    "normalized_entropy": 0.9521447323985379,
+    "normalized_entropy": 0.9388468716361946,
     "abstained": true,
     "context_level": null,
-    "switch_probability": 0.5096203753761306,
+    "switch_probability": 0.5155474841604059,
     "recent_window_size": 3,
     "mood_distribution": [
       {
         "mood_cluster_id": 0,
         "mood_label": "High energy, negative",
-        "probability": 0.4903796246238694
+        "probability": 0.48445251583959414
       },
       {
         "mood_cluster_id": 1,
         "mood_label": "High energy, positive",
-        "probability": 0.26131529944003473
+        "probability": 0.3265700553000209
       },
       {
         "mood_cluster_id": 2,
         "mood_label": "Medium energy, negative, acoustic",
-        "probability": 0.24830507593609585
+        "probability": 0.1889774288603849
       }
     ],
     "recommended_tracks": [
-      {
-        "track_id": "5XhMgAWzou6EjDmQtoyoZE",
-        "track_name": "I Love You",
-        "artist_name": "Fontaines D.C.",
-        "image_url": "https://i.scdn.co/image/ab67616d00001e02b23737878e75582c2e255029"
-      },
       {
         "track_id": "3mOoPkvBiO784mr4RSTkRV",
         "track_name": "Breathe",
         "artist_name": "Masego",
         "image_url": "https://i.scdn.co/image/ab67616d00001e02a228c0cc10d63953a87eba47"
+      },
+      {
+        "track_id": "5XhMgAWzou6EjDmQtoyoZE",
+        "track_name": "I Love You",
+        "artist_name": "Fontaines D.C.",
+        "image_url": "https://i.scdn.co/image/ab67616d00001e02b23737878e75582c2e255029"
       }
     ]
   },
@@ -103,7 +103,7 @@
     "4": 0.05747126436781609,
     "5": 0.16091954022988506,
     "6": 0.3793103448275862,
-    "7": 0.9195402298850575,
+    "7": 0.9310344827586207,
     "8": 1.0,
     "9": 0.7586206896551724,
     "10": 0.8505747126436781,
@@ -159,8 +159,22 @@
       }
     }
   ],
-  "mood_trajectory": null,
+  "mood_trajectory": [
+    {
+      "time": "2026-11-24T04:30:00+00:00",
+      "valence": 0.271,
+      "energy": 0.308
+    }
+  ],
   "recently_played": [
+    {
+      "track_id": "1k5iH4KDKi56MFvlnrALNV",
+      "track_name": "Rock 'n' Roll Suicide - 2012 Remaster",
+      "artist_name": "David Bowie",
+      "played_at": "2026-11-24T04:43:04.137000+00:00",
+      "image_url": "https://i.scdn.co/image/ab67616d00001e02c41f4e1133b0e6c5fcf58680",
+      "mood_cluster_id": 0
+    },
     {
       "track_id": "1k5iH4KDKi56MFvlnrALNV",
       "track_name": "Rock 'n' Roll Suicide - 2012 Remaster",
@@ -352,14 +366,6 @@
       "played_at": "2026-11-20T10:37:40.016000+00:00",
       "image_url": "https://i.scdn.co/image/ab67616d00001e02e3f1ba3de4659708c25d0f39",
       "mood_cluster_id": 0
-    },
-    {
-      "track_id": "5ruzrDWcT0vuJIOMW7gMnW",
-      "track_name": "The Adults Are Talking",
-      "artist_name": "The Strokes",
-      "played_at": "2026-11-20T10:32:08.717000+00:00",
-      "image_url": "https://i.scdn.co/image/ab67616d00001e02e3f1ba3de4659708c25d0f39",
-      "mood_cluster_id": 1
     }
   ],
   "metrics": {
@@ -3130,46 +3136,46 @@
   "drift": {
     "feature_drift": {
       "session_duration": {
-        "recent_mean": 15.97034871794872,
-        "recent_std": 34.40629301199231,
-        "prior_mean": 23.47347984126984,
-        "prior_std": 31.494746583397564,
-        "mean_pct_change": -31.964289803037673,
-        "std_pct_change": 9.244546295633846
+        "recent_mean": 10.63428253968254,
+        "recent_std": 18.388705904113415,
+        "prior_mean": 23.775205345911957,
+        "prior_std": 34.162333362668285,
+        "mean_pct_change": -55.2715428322849,
+        "std_pct_change": -46.17257050653303
       },
       "sessions_per_day": {
-        "recent_mean": 3.25,
-        "recent_std": 1.5612494995995996,
-        "prior_mean": 3.5,
-        "prior_std": 1.5438048235879214,
-        "mean_pct_change": -7.142857142857142,
-        "std_pct_change": 1.1299793694863212
+        "recent_mean": 2.625,
+        "recent_std": 1.3169567191065923,
+        "prior_mean": 3.533333333333333,
+        "prior_std": 1.5860503004493758,
+        "mean_pct_change": -25.707547169811317,
+        "std_pct_change": -16.966270317312205
       },
       "tracks_per_day": {
-        "recent_mean": 10.625,
-        "recent_std": 8.350711047569542,
-        "prior_mean": 14.566666666666666,
-        "prior_std": 8.26108682653533,
-        "mean_pct_change": -27.059496567505718,
-        "std_pct_change": 1.0848962481102506
+        "recent_mean": 7.875,
+        "recent_std": 7.389815626928726,
+        "prior_mean": 14.6,
+        "prior_std": 8.292968909463807,
+        "mean_pct_change": -46.06164383561644,
+        "std_pct_change": -10.890590479658217
       },
       "start_hour_entropy": {
-        "recent": 3.5616073922012155,
-        "prior": 3.935367346195146,
-        "change": -0.3737599539939307,
-        "pct_change": -9.497460366826878
+        "recent": 3.403989446485261,
+        "prior": 3.936266467524087,
+        "change": -0.5322770210388259,
+        "pct_change": -13.522382832319488
       },
       "drift_summary": {
         "drift_detected": true,
         "threshold": 20.0,
-        "max_pct_change": 31.964289803037673
+        "max_pct_change": 55.2715428322849
       }
     },
     "label_drift": {
       "session_start_rate": {
-        "recent": 3.25,
-        "prior": 3.5,
-        "pct_change": -7.142857142857142
+        "recent": 2.625,
+        "prior": 3.533333333333333,
+        "pct_change": -25.707547169811317
       },
       "days_with_sessions": {
         "recent": 1.1428571428571428,
@@ -3199,13 +3205,13 @@
         },
         "4": {
           "recent": 2.0,
-          "prior": 9.0,
-          "pct_change": -77.77777777777779
+          "prior": 10.0,
+          "pct_change": -80.0
         },
         "5": {
-          "recent": 5.0,
-          "prior": 11.0,
-          "pct_change": -54.54545454545454
+          "recent": 4.0,
+          "prior": 12.0,
+          "pct_change": -66.66666666666666
         },
         "6": {
           "recent": 1.0,
@@ -3213,29 +3219,29 @@
           "pct_change": -87.5
         },
         "7": {
-          "recent": 4.0,
-          "prior": 8.0,
-          "pct_change": -50.0
+          "recent": 3.0,
+          "prior": 9.0,
+          "pct_change": -66.66666666666666
         },
         "8": {
-          "recent": 2.0,
-          "prior": 4.0,
-          "pct_change": -50.0
-        },
-        "9": {
-          "recent": 0.0,
-          "prior": 13.0,
-          "pct_change": -100.0
-        },
-        "10": {
           "recent": 2.0,
           "prior": 3.0,
           "pct_change": -33.33333333333333
         },
-        "11": {
+        "9": {
+          "recent": 0.0,
+          "prior": 11.0,
+          "pct_change": -100.0
+        },
+        "10": {
           "recent": 1.0,
-          "prior": 6.0,
-          "pct_change": -83.33333333333334
+          "prior": 4.0,
+          "pct_change": -75.0
+        },
+        "11": {
+          "recent": 0.0,
+          "prior": 7.0,
+          "pct_change": -100.0
         },
         "12": {
           "recent": 2.0,
@@ -3243,9 +3249,9 @@
           "pct_change": -60.0
         },
         "13": {
-          "recent": 1.0,
+          "recent": 0.0,
           "prior": 7.0,
-          "pct_change": -85.71428571428571
+          "pct_change": -100.0
         },
         "14": {
           "recent": 2.0,
@@ -3284,8 +3290,8 @@
         },
         "21": {
           "recent": 1.0,
-          "prior": 7.0,
-          "pct_change": -85.71428571428571
+          "prior": 6.0,
+          "pct_change": -83.33333333333334
         },
         "22": {
           "recent": 0.0,
@@ -3299,12 +3305,12 @@
         }
       },
       "drift_summary": {
-        "drift_detected": false,
+        "drift_detected": true,
         "threshold": 20.0,
-        "max_pct_change": 14.28571428571428
+        "max_pct_change": 25.707547169811317
       }
     },
     "overall_drift_detected": true,
-    "detection_date": "2026-11-24T09:55:18.526319"
+    "detection_date": "2026-11-24T15:09:06.653995"
   }
 }
